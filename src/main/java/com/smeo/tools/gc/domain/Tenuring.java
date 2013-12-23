@@ -20,6 +20,21 @@ public class Tenuring {
         return ages;
     }
 
+    public int getSumOfTotals(){
+        int sum = 0;
+        for (int i = 0; i < MAX_AGE; i++){
+            sum += totalSpace[i];
+        }
+        return sum;
+    }
+    public int getSumOfUsed(){
+        int sum = 0;
+        for (int i = 0; i < MAX_AGE; i++){
+            sum += usedSpace[i];
+        }
+        return sum;
+    }
+
     public Integer getYoungGenPromotion() {
         return usedSpace[0];
     }

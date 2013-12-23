@@ -62,6 +62,7 @@ public class NewGcParser {
 	JFreeChart applicationStopTimeChart;
 	JFreeChart garbageCollectionCountChart;
     JFreeChart tenuringChart;
+    JFreeChart tenuringChart2;
 
 	MovingDomainMarker movingDomainMarker;
 	GcLogParser gcLogParser;
@@ -148,6 +149,15 @@ public class NewGcParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            tenuringChart2 = TenuringDataSetPlotChartFactory.createUsedVsTotalTenuringDistributionChart(TenuringDataSetFactory
+                    .createDataSet(allGarbageCollectionEvents));
+            addChart(tenuringChart2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
 		try {

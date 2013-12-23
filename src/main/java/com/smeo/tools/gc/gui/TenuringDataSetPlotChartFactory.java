@@ -24,7 +24,7 @@ import java.awt.*;
 public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
     public static JFreeChart createChartAgeSettings(TenuringDataSetFactory.TenuringDataSet tenuringDataSet) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Tenuring",
+                "Tenuring(Age)",
                 "Time of Day",
                 "Primary Range Axis",
                 null,
@@ -44,6 +44,38 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
         tenuringDataCollection.addSeries(createBigDecimalTimeSeries("newThreshold(age)", tenuringDataSet.newThreshold));
         tenuringDataCollection.addSeries(createBigDecimalTimeSeries("max(age)", tenuringDataSet.maxAges));
 
+        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "tenuringData", true, -1, true);
+        renderer.setSeriesPaint(0, Color.red);
+        renderer.setSeriesPaint(1, Color.green);
+        renderer.setSeriesPaint(2, Color.blue);
+
+        return chart;
+    }
+
+    public static JFreeChart createUsedVsTotalTenuringDistributionChart(TenuringDataSetFactory.TenuringDataSet tenuringDataSet) {
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Tenuring (Sums/kB)",
+                "Time of Day",
+                "Primary Range Axis",
+                null,
+                true,
+                true,
+                false
+        );
+        chart.setBackgroundPaint(Color.white);
+        chart.addSubtitle(new TextTitle("different values shown in one timeline"));
+        XYPlot plot = chart.getXYPlot();
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
+
+        TimeSeriesCollection tenuringDataCollection = new TimeSeriesCollection();
+
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("desiredSurvivorSize", tenuringDataSet.desiredSurvivorSize));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumTotals", tenuringDataSet.sumTotal));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumUsed", tenuringDataSet.sumUsed));
+
         AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "tenuringData", false, -1, true);
         renderer.setSeriesPaint(0, Color.red);
         renderer.setSeriesPaint(1, Color.green);
@@ -54,7 +86,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
 
     public static JFreeChart createTotalAgeDistributionChart(TenuringDataSetFactory.TenuringDataSet tenuringDataSet) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Tenuring",
+                "Tenuring (kB)",
                 "Time of Day",
                 "Primary Range Axis",
                 null,
@@ -75,7 +107,9 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
             tenuringDataCollection.addSeries(createBigDecimalTimeSeries("totalSize-Age"+i, tenuringDataSet.agesTotal[i]));
         }
 
-        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("desiredSurvivorSize(B)", tenuringDataSet.desiredSurvivorSize));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("desiredSurvivorSize", tenuringDataSet.desiredSurvivorSize));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumTotals", tenuringDataSet.sumTotal));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumUsed", tenuringDataSet.sumUsed));
 
         AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "tenuringData", false, -1, true);
         renderer.setSeriesPaint(0, Color.red);
