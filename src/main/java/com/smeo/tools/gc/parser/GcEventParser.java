@@ -220,7 +220,8 @@ public class GcEventParser {
 		PsYoungGen(GcMemory.Eden, "PSYoungGen"),
 		PSOldGen(GcMemory.OldGen, "PSOldGen"),
 		PSPermGen(GcMemory.PermGen, "PSPermGen"),
-		Tenured(GcMemory.OldGen, "OldGen:"),
+        Tenured(GcMemory.OldGen, "Tenured:"),
+		CMSTenured(GcMemory.OldGen, "OldGen:"),
 		CMSPerm(GcMemory.PermGen, "CMS Perm :"),
 		Perm(GcMemory.PermGen, "Perm :"),
 		CMS(GcMemory.Eden, "CMS");
