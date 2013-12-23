@@ -8,8 +8,10 @@ public class TenuringParser {
 	public Tenuring parse(String currLine) {
 		if (currLine.startsWith("Desired survivor size ")) {
 			tenuring = new Tenuring();
-			String[] elements = currLine.split("\\(max|\\)");
-			tenuring.max = Integer.valueOf(elements[1].trim());
+			String[] elements = currLine.split("size|bytes|threshold|max|\\(|\\)");
+            tenuring.desiredSurvivorSpace = Integer.valueOf(elements[1].trim());
+            tenuring.newThreshold = Integer.valueOf(elements[3].trim());
+			tenuring.max = Integer.valueOf(elements[5].trim());
 		} else {
 			if (tenuring != null) {
 				if (currLine.startsWith("- age")) {

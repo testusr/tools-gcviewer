@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tenuring {
+    public int newThreshold;
     public int max;
+
+    public int desiredSurvivorSpace;
     public int[] usedSpace = createEmptyAges();
     public int[] totalSpace = createEmptyAges();
 

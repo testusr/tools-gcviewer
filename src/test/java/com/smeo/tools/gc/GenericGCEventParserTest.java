@@ -86,8 +86,12 @@ public class GenericGCEventParserTest extends TestCase {
             event = parser.parseLogLine(s);
         }
         assertEquals(15, event.tenuring.max);
+        assertEquals(15, event.tenuring.newThreshold);
+        assertEquals(5242880, event.tenuring.desiredSurvivorSpace);
+
         assertEquals(63312, event.tenuring.usedSpace[1]);
         assertEquals(40328, event.tenuring.usedSpace[14]);
+
 
         assertEquals(896240, event.tenuring.totalSpace[1]);
         assertEquals(1414472, event.tenuring.totalSpace[14]);
