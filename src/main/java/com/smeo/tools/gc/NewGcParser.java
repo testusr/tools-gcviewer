@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import com.smeo.tools.gc.dataset.*;
+import com.smeo.tools.gc.gui.TenuringDataSetPlotChartFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -30,10 +32,6 @@ import org.jfree.chart.JFreeChart;
 import com.smeo.tools.charts.ChartUtility;
 import com.smeo.tools.charts.MovingDomainMarker;
 import com.smeo.tools.charts.PlotChartFactory;
-import com.smeo.tools.gc.dataset.GarbageCollectionDataSetFactory;
-import com.smeo.tools.gc.dataset.MemoryDataSetFactory;
-import com.smeo.tools.gc.dataset.StopTimeDataSetFactory;
-import com.smeo.tools.gc.dataset.SurvivorInputOutputDataSetFactory;
 import com.smeo.tools.gc.domain.GarbageCollectionEvent;
 import com.smeo.tools.gc.gui.GarbaceCollectionCountChartFactory;
 import com.smeo.tools.gc.gui.MemoryInfoDataSetPlotChartFactory;
@@ -63,11 +61,13 @@ public class NewGcParser {
 	JFreeChart survivorSpaceFlowChart;
 	JFreeChart applicationStopTimeChart;
 	JFreeChart garbageCollectionCountChart;
+    JFreeChart tenuringChart;
 
 	MovingDomainMarker movingDomainMarker;
 	GcLogParser gcLogParser;
 	MemoryDataSetFactory dataSetFactory = new MemoryDataSetFactory();
 	SurvivorInputOutputDataSetFactory survivorInputOutputDataSetFactory = new SurvivorInputOutputDataSetFactory();
+    TenuringDataSetPlotChartFactory tenuringDataSetPlotChartFactory = new TenuringDataSetPlotChartFactory();
 
 	List<JFreeChart> charts = new ArrayList<JFreeChart>();
 
@@ -132,6 +132,23 @@ public class NewGcParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+        try {
+            tenuringChart = TenuringDataSetPlotChartFactory.createTotalAgeDistributionChart(TenuringDataSetFactory
+                    .createDataSet(allGarbageCollectionEvents));
+            addChart(tenuringChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            tenuringChart = tenuringDataSetPlotChartFactory.createChartAgeSettings(TenuringDataSetFactory
+                    .createDataSet(allGarbageCollectionEvents));
+            addChart(tenuringChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 		try {
 			if (allGarbageCollectionEvents.size() > 0) {
