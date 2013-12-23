@@ -207,17 +207,20 @@ public class GcEventParser {
 
 	public enum GcMemory {
 		PermGen,
-		Tenured,
-		Eden,
+        OldGen,
+        YoungGen,
+        Eden,
+        Survivor,
 		TotalHeap
 	}
 
 	public enum GcEventType {
 		TOTAL(GcMemory.TotalHeap, null),
+        DefNew(GcMemory.Eden, "DefNew"),
 		PsYoungGen(GcMemory.Eden, "PSYoungGen"),
-		PSOldGen(GcMemory.Tenured, "PSOldGen"),
+		PSOldGen(GcMemory.OldGen, "PSOldGen"),
 		PSPermGen(GcMemory.PermGen, "PSPermGen"),
-		Tenured(GcMemory.Tenured, "Tenured:"),
+		Tenured(GcMemory.OldGen, "OldGen:"),
 		CMSPerm(GcMemory.PermGen, "CMS Perm :"),
 		Perm(GcMemory.PermGen, "Perm :"),
 		CMS(GcMemory.Eden, "CMS");

@@ -13,8 +13,9 @@ public class TenuringParser {
 		} else {
 			if (tenuring != null) {
 				if (currLine.startsWith("- age")) {
-					String[] elements = currLine.split("- age|:|bytes");
-					tenuring.ages.add(Integer.valueOf(elements[2].trim()));
+					String[] elements = currLine.split("- age|:|bytes|total|,");
+					tenuring.usedSpace[Integer.valueOf(elements[1].trim())-1] = Integer.valueOf(elements[2].trim());
+                    tenuring.totalSpace[Integer.valueOf(elements[1].trim())-1] = Integer.valueOf(elements[4].trim());
 				} else if (tenuring != null) {
 					Tenuring value = tenuring;
 					tenuring = null;
@@ -22,6 +23,6 @@ public class TenuringParser {
 				}
 			}
 		}
-		return null;
+		return tenuring;
 	}
 }

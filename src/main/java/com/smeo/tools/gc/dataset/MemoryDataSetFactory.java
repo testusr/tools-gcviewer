@@ -96,9 +96,12 @@ public class MemoryDataSetFactory {
 	private List<DataSetEntry> getTotalMemoryDataSet(List<BeforeAfterGcMemorySpace> rawData) {
 		List<DataSetEntry> resultDataSet = new ArrayList<DataSetEntry>();
 		for (BeforeAfterGcMemorySpace currBeforeAfterGcMemorySpace : rawData) {
+            if (currBeforeAfterGcMemorySpace.isValid()){
 			resultDataSet.add(new DataSetEntry(currBeforeAfterGcMemorySpace.getGcStartedTime(), currBeforeAfterGcMemorySpace.beforeGc.usedSpace));
 			resultDataSet.add(new DataSetEntry(currBeforeAfterGcMemorySpace.getGcFinishedTime(), currBeforeAfterGcMemorySpace.afterGc.usedSpace));
+            }
 		}
+
 		return resultDataSet;
 	}
 
@@ -110,17 +113,20 @@ public class MemoryDataSetFactory {
 			if (previousDataEntry == null) {
 				previousDataEntry = currBeforeAfterGcMemorySpace;
 			} else {
+                if (currBeforeAfterGcMemorySpace.beforeGc != MemorySpace.UNDEFINED && currBeforeAfterGcMemorySpace.afterGc != MemorySpace.UNDEFINED){
+                    try {
+
 				float rawDataTimeInterval = currBeforeAfterGcMemorySpace.gcLoggedTime - previousDataEntry.gcLoggedTime;
 				float grownDataAmountInK = currBeforeAfterGcMemorySpace.beforeGc.getUsedSpaceInK() - previousDataEntry.afterGc.getUsedSpaceInK();
 				float growRateInK = 0.0F;
 				if (grownDataAmountInK > 0) {
 					growRateInK = (grownDataAmountInK / rawDataTimeInterval) * ((float) perTimeInMs);
 				}
-				try {
 					resultDataSet.add(new DataSetEntry(currBeforeAfterGcMemorySpace.gcLoggedTime, growRateInK));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+                }
 				previousDataEntry = currBeforeAfterGcMemorySpace;
 			}
 		}
@@ -131,10 +137,12 @@ public class MemoryDataSetFactory {
 		List<DataSetEntry> resultDataSet = new ArrayList<DataSetEntry>();
 
 		for (BeforeAfterGcMemorySpace currBeforeAfterGcMemorySpace : rawData) {
+            if (currBeforeAfterGcMemorySpace.beforeGc != null && currBeforeAfterGcMemorySpace.afterGc != null){
 			resultDataSet.add(new DataSetEntry(currBeforeAfterGcMemorySpace.getGcStartedTime(), currBeforeAfterGcMemorySpace.beforeGc
 					.getUsedSpaceInPercentage()));
 			resultDataSet.add(new DataSetEntry(currBeforeAfterGcMemorySpace.getGcFinishedTime(), currBeforeAfterGcMemorySpace.afterGc
 					.getUsedSpaceInPercentage()));
+            }
 		}
 		return resultDataSet;
 	}
@@ -142,19 +150,19 @@ public class MemoryDataSetFactory {
 	private static class BeforeAfterGcMemorySpace {
 		long gcLoggedTime;
 		long gcTookTimeInMs = -1;
-		MemorySpace beforeGc;
-		MemorySpace afterGc;
+		MemorySpace beforeGc = MemorySpace.UNDEFINED;
+		MemorySpace afterGc = MemorySpace.UNDEFINED;
 
 		public BeforeAfterGcMemorySpace(long time, MemorySpace beforeGc, MemorySpace afterGc) {
 			this.gcLoggedTime = time;
-			this.beforeGc = beforeGc;
-			this.afterGc = afterGc;
+            this.beforeGc = beforeGc == null ? MemorySpace.UNDEFINED : beforeGc;
+            this.afterGc = afterGc == null ? MemorySpace.UNDEFINED : afterGc;
 		}
 
 		public BeforeAfterGcMemorySpace(GcTiming gcTiming, long time, MemorySpace beforeGc, MemorySpace afterGc) {
 			this.gcLoggedTime = time;
-			this.beforeGc = beforeGc;
-			this.afterGc = afterGc;
+			this.beforeGc = beforeGc == null ? MemorySpace.UNDEFINED : beforeGc;
+			this.afterGc = afterGc == null ? MemorySpace.UNDEFINED : afterGc;
 			this.gcTookTimeInMs = gcTiming.getMostAccurateTotalTimeInMs();
 		}
 
@@ -165,7 +173,11 @@ public class MemoryDataSetFactory {
 		public long getGcFinishedTime() {
 			return gcLoggedTime;
 		}
-	}
+
+        public boolean isValid() {
+            return (beforeGc != MemorySpace.UNDEFINED && afterGc != MemorySpace.UNDEFINED);
+        }
+    }
 
 	public static class MemoryInfoDataSet {
 		public List<DataSetEntry> totalMemory;

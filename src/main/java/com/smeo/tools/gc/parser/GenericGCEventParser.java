@@ -12,7 +12,8 @@ import com.smeo.tools.gc.parser.GcEventParser.GcType;
 
 public class GenericGCEventParser extends GarbageCollectionEventParser {
 	GcEventParser gcEventParser = new GcEventParser();
-	GarbageCollectionEvent garbageCollectionEvent = null;
+    TenuringParser tenuringParser;
+	GarbageCollectionEvent currGarbageCollectionEvent = null;
 	GcType gcType = null;
 	int minorGcCount = 0;
 	int majorGcCount = 0;
@@ -31,24 +32,26 @@ public class GenericGCEventParser extends GarbageCollectionEventParser {
 					minorGcCount++;
 				}
 
-				garbageCollectionEvent = new GarbageCollectionEvent();
-				garbageCollectionEvent.time = date;
+				currGarbageCollectionEvent = new GarbageCollectionEvent();
+				currGarbageCollectionEvent.time = date;
 
 				HeapState heapAfterGC = new HeapState();
 				HeapState heapBeforeGC = new HeapState();
 
-				garbageCollectionEvent.heapAfterGC = heapAfterGC;
-				garbageCollectionEvent.heapBeforeGC = heapBeforeGC;
+				currGarbageCollectionEvent.heapAfterGC = heapAfterGC;
+				currGarbageCollectionEvent.heapBeforeGC = heapBeforeGC;
 
 				heapBeforeGC.fullGcCount = getMajorGcCountBefore();
 				heapBeforeGC.minorGcCount = getMinorGcCountBefore();
 
 				heapAfterGC.fullGcCount = majorGcCount;
 				heapAfterGC.minorGcCount = minorGcCount;
+
+                this.tenuringParser = new TenuringParser();
 			}
 		}
 
-		if (garbageCollectionEvent != null) {
+		if (currGarbageCollectionEvent != null) {
 			List<GcEvent> gcEvents = gcEventParser.parseGcEvents(currLine);
 
 			for (GcEvent currEvent : gcEvents) {
@@ -56,35 +59,37 @@ public class GenericGCEventParser extends GarbageCollectionEventParser {
 
 				switch (gcVersion.getMemoryType()) {
 				case Eden: {
-					garbageCollectionEvent.heapBeforeGC.setEdenSpace(currEvent.before);
-					garbageCollectionEvent.heapAfterGC.setEdenSpace(currEvent.after);
+					currGarbageCollectionEvent.heapBeforeGC.setEdenSpace(currEvent.before);
+					currGarbageCollectionEvent.heapAfterGC.setEdenSpace(currEvent.after);
 					break;
 				}
 				case PermGen: {
-					garbageCollectionEvent.heapBeforeGC.setPermGenSpace(currEvent.before);
-					garbageCollectionEvent.heapAfterGC.setPermGenSpace(currEvent.after);
+					currGarbageCollectionEvent.heapBeforeGC.setPermGenSpace(currEvent.before);
+					currGarbageCollectionEvent.heapAfterGC.setPermGenSpace(currEvent.after);
 					break;
 				}
-				case Tenured: {
-					garbageCollectionEvent.heapBeforeGC.setOldGenSpace(currEvent.before);
-					garbageCollectionEvent.heapAfterGC.setOldGenSpace(currEvent.after);
+				case OldGen: {
+					currGarbageCollectionEvent.heapBeforeGC.setOldGenSpace(currEvent.before);
+					currGarbageCollectionEvent.heapAfterGC.setOldGenSpace(currEvent.after);
 					break;
 				}
 				case TotalHeap: {
-					garbageCollectionEvent.heapBeforeGC.setTotalMemSpace(currEvent.before);
-					garbageCollectionEvent.heapAfterGC.setTotalMemSpace(currEvent.after);
+					currGarbageCollectionEvent.heapBeforeGC.setTotalMemSpace(currEvent.before);
+					currGarbageCollectionEvent.heapAfterGC.setTotalMemSpace(currEvent.after);
 				}
 				}
 
 			}
 			GcTiming gcTiming = null;
 			if ((gcTiming = gcEventParser.parseGcTiming(currLine)) != null) {
-				GarbageCollectionEvent toReturn = garbageCollectionEvent;
+				GarbageCollectionEvent toReturn = currGarbageCollectionEvent;
 				toReturn.gcTiming = gcTiming;
-				garbageCollectionEvent = null;
+				currGarbageCollectionEvent = null;
 				gcType = null;
 				return toReturn;
 			}
+
+            this.currGarbageCollectionEvent.tenuring = tenuringParser.parse(currLine);
 		}
 		return null;
 	}

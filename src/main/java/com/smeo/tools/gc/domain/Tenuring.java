@@ -4,25 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tenuring {
-	public int max;
-	public List<Integer> ages = new ArrayList<Integer>();
+    public int max;
+    public int[] usedSpace = createEmptyAges();
+    public int[] totalSpace = createEmptyAges();
 
-	public Integer getYoungGenPromotion() {
-		if (ages.size() > 0) {
-			return ages.get(0);
-		}
-		return null;
-	}
+    private static int[] createEmptyAges() {
+        int[] ages = new int[15];
+        for (int i = 0; i < 15; i++) {
+            ages[i] = 0;
+        }
+        return ages;
+    }
 
-	public Integer getOldGenPromotion() {
-		if (ages.size() == max) {
-			return ages.get(max - 1);
-		}
-		return null;
-	}
+    public Integer getYoungGenPromotion() {
+        return usedSpace[0];
+    }
 
-	@Override
-	public String toString() {
-		return "Tenuring [max=" + max + ", ages=" + ages + "]";
-	}
+    public Integer getOldGenPromotion() {
+        return usedSpace[14];
+    }
+
+    @Override
+    public String toString() {
+        return "Tenuring [max=" + max + ", usedSpace=" + usedSpace + "]";
+    }
 }

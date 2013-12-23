@@ -20,11 +20,14 @@ public class HeapState {
 	}
 
 	public MemorySpace getUsedSurvivorSpace() {
+        if (memorySpace.survivorFromSpace != null){
 		if (memorySpace.survivorFromSpace.getUsedSpaceInPercentage() > 0) {
 			return memorySpace.survivorFromSpace;
 		} else {
 			return memorySpace.survivorToSpace;
 		}
+        }
+        return MemorySpace.UNDEFINED;
 	}
 
 	public void setOldGenSpace(MemorySpace oldGenSpace) {

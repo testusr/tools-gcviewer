@@ -23,7 +23,8 @@ public class HeapMemorySpace {
 	}
 
 	public static class MemorySpace {
-		public Integer totalSpace;
+        public static final MemorySpace UNDEFINED = new MemorySpace();
+        public Integer totalSpace;
 		public Integer usedSpace;
 		public Float usedPercentage;
 
@@ -32,7 +33,10 @@ public class HeapMemorySpace {
 		}
 
 		public float getUsedSpaceInPercentage() {
+            if (usedPercentage != null){
 			return usedPercentage;
+            }
+            return -1;
 		}
 
 		public boolean isFilled() {
