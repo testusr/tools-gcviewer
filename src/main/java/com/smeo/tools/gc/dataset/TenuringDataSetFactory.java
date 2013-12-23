@@ -30,7 +30,8 @@ public class TenuringDataSetFactory {
                 survivorInputOutput.sumUsed.add(new DataSetEntry(currEventTime, currTenuring.getSumOfUsed()/1024));
 
                 for (int i=0; i< Tenuring.MAX_AGE; i++){
-                    survivorInputOutput.agesTotal[i].add(new DataSetEntry(currEventTime, (currTenuring.totalSpace[i]/1024)));
+                    int currTotalSpace = currTenuring.totalSpace[i] / 1024;
+                    survivorInputOutput.agesTotal[i].add(new DataSetEntry(currEventTime, currTotalSpace));
                 }
             }
         }

@@ -7,6 +7,7 @@ public class HeapMemorySpace {
 	public MemorySpace edenSpace = null;
 	public MemorySpace survivorFromSpace = null;
 	public MemorySpace survivorToSpace = null;
+
 	public MemorySpace oldGenSpace = null;
 	public MemorySpace permGenSpace = null;
 
@@ -24,7 +25,7 @@ public class HeapMemorySpace {
 
 	public static class MemorySpace {
         public static final MemorySpace UNDEFINED = new MemorySpace();
-        public Integer totalSpace;
+        public Integer totalSpace;  // total available space
 		public Integer usedSpace;
 		public Float usedPercentage;
 

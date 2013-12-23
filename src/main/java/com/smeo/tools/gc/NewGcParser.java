@@ -56,7 +56,6 @@ public class NewGcParser {
 	JFreeChart edenSpaceChart;
 	JFreeChart survivorSpaceChart;
 	JFreeChart oldGenSpaceChart;
-	JFreeChart permGenSpaceChart;
 	JFreeChart permGenSpaceChartTotal;
 	JFreeChart survivorSpaceFlowChart;
 	JFreeChart applicationStopTimeChart;
@@ -84,7 +83,7 @@ public class NewGcParser {
 		int intervalInMs = 500;
 		try {
 			totalMemoryChart = memoryInfoDataSetPlotChart.createChart(
-					dataSetFactory.createTotalMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "TotalSpace", false, false, true);
+					dataSetFactory.createTotalMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "TotalSpace", false, true, true);
 			addChart(totalMemoryChart);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,34 +104,28 @@ public class NewGcParser {
 		}
 		try {
 			oldGenSpaceChart = memoryInfoDataSetPlotChart.createChart(
-					dataSetFactory.createOldGenMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "OldGenSpace", false, false, true);
+					dataSetFactory.createOldGenMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "OldGenSpace", true, true, true);
 			addChart(oldGenSpaceChart);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try {
-			permGenSpaceChart = memoryInfoDataSetPlotChart.createChart(
-					dataSetFactory.createPermGenMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "PermGenSpace", true, false, false);
-			addChart(permGenSpaceChart);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 
 		try {
 			permGenSpaceChartTotal = memoryInfoDataSetPlotChart.createChart(
-					dataSetFactory.createPermGenMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "PermGenSpace(TotalSpace)", false, false, true);
+					dataSetFactory.createPermGenMemoryDataSets(allGarbageCollectionEvents, intervalInMs), "PermGenSpace(TotalSpace)", true, false, true);
 			addChart(permGenSpaceChartTotal);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		try {
-			survivorSpaceFlowChart = SurvivorIncomingOutgoingChartFactory.createChart(survivorInputOutputDataSetFactory
-					.createDataSet(allGarbageCollectionEvents));
-			addChart(survivorSpaceChart);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			survivorSpaceFlowChart = SurvivorIncomingOutgoingChartFactory.createChart(survivorInputOutputDataSetFactory
+//					.createDataSet(allGarbageCollectionEvents));
+//			addChart(survivorSpaceChart);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
         try {
             tenuringChart = TenuringDataSetPlotChartFactory.createTotalAgeDistributionChart(TenuringDataSetFactory

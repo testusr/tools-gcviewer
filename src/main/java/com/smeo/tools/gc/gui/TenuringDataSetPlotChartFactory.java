@@ -108,8 +108,6 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
         }
 
         tenuringDataCollection.addSeries(createBigDecimalTimeSeries("desiredSurvivorSize", tenuringDataSet.desiredSurvivorSize));
-        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumTotals", tenuringDataSet.sumTotal));
-        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("sumUsed", tenuringDataSet.sumUsed));
 
         AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "tenuringData", false, -1, true);
         renderer.setSeriesPaint(0, Color.red);

@@ -32,25 +32,35 @@ public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
 		plot.setDomainGridlinePaint(Color.white);
 		plot.setRangeGridlinePaint(Color.white);
 
-		if (incomingMem) {
-			TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
-			memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("incomingMemory(K)", infoDataSet.incomingDataRate));
-			AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, memoryTrafficCollection, "incomingMemory", false, 500000.0, true);
-			renderer.setSeriesPaint(0, Color.green);
-		}
+        int seriesId = 0;
 
-		if (usedSpace) {
-			TimeSeriesCollection percentageGraphCollection = new TimeSeriesCollection();
-			percentageGraphCollection.addSeries(createBigDecimalTimeSeries("usedSpace(%)", infoDataSet.beforeGcUsedPerc));
-			AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, percentageGraphCollection, "usedSpace", false, 100.0, true);
-			renderer.setSeriesPaint(0, Color.yellow);
+        if (usedSpace) {
+            TimeSeriesCollection percentageGraphCollection = new TimeSeriesCollection();
+            percentageGraphCollection.addSeries(createBigDecimalTimeSeries("usedSpace(%)", infoDataSet.beforeGcUsedPerc));
+            AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, seriesId, percentageGraphCollection, "usedSpace", false, 100.0, true);
+            renderer.setSeriesPaint(seriesId, Color.yellow);
+            seriesId++;
+        }
+
+        TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
+        AbstractXYItemRenderer memoryTrafficRenderer = null;
+
+        if (incomingMem) {
+			memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("incomingMemory(s)", infoDataSet.incomingDataRate));
+			memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "memoryTraffic(kB)", false, 500000.0, true);
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.green);
+            seriesId++;
 		}
-		if (totalMemory) {
-			TimeSeriesCollection totalMemoryCollection = new TimeSeriesCollection();
-			totalMemoryCollection.addSeries(createBigDecimalTimeSeries("totalMemory(K)", infoDataSet.totalMemory));
-			AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, totalMemoryCollection, "maxSpace", false, -1, true);
-			renderer.setSeriesPaint(0, Color.blue);
-		}
+        if (totalMemory) {
+            memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("maxMemory", infoDataSet.totalMemory));
+            if (memoryTrafficRenderer == null){
+            memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "maxSpace", false, -1, true);
+            }
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.blue);
+            seriesId++;
+        }
+
+
 		return chart;
 	}
 

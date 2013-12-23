@@ -6,6 +6,7 @@ import java.util.List;
 import com.smeo.tools.common.DataSetEntry;
 import com.smeo.tools.gc.domain.GarbageCollectionEvent;
 import com.smeo.tools.gc.domain.GcTiming;
+import com.smeo.tools.gc.domain.HeapMemorySpace;
 import com.smeo.tools.gc.domain.HeapMemorySpace.MemorySpace;
 
 public class MemoryDataSetFactory {
@@ -26,11 +27,15 @@ public class MemoryDataSetFactory {
     public MemoryInfoDataSet createUsedSurvivorMemoryDataSets(List<GarbageCollectionEvent> allGarbageCollectionEvents, long intervalInMs) {
         List<BeforeAfterGcMemorySpace> rawData = new ArrayList<MemoryDataSetFactory.BeforeAfterGcMemorySpace>();
         for (GarbageCollectionEvent currCollectionEvent : allGarbageCollectionEvents) {
-            rawData.add(new BeforeAfterGcMemorySpace(
-                    currCollectionEvent.gcTiming,
-                    currCollectionEvent.time.getTime(),
-                    currCollectionEvent.heapBeforeGC.getUsedSurvivorSpace(),
-                    currCollectionEvent.heapAfterGC.getUsedSurvivorSpace()));
+            MemorySpace usedSurvivorSpaceBefore = currCollectionEvent.heapBeforeGC.getUsedSurvivorSpace();
+            MemorySpace usedSurvivorSpaceAfter = currCollectionEvent.heapAfterGC.getUsedSurvivorSpace();
+            if (usedSurvivorSpaceAfter != MemorySpace.UNDEFINED && usedSurvivorSpaceBefore != MemorySpace.UNDEFINED) {
+                rawData.add(new BeforeAfterGcMemorySpace(
+                        currCollectionEvent.gcTiming,
+                        currCollectionEvent.time.getTime(),
+                        usedSurvivorSpaceBefore,
+                        usedSurvivorSpaceAfter));
+            }
         }
 
         return createMemoryDataSet(rawData);

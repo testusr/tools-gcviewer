@@ -12,12 +12,18 @@ public class GarbageCollectionDataSetFactory {
 		int compactingCollectionCount = 0;
 		GarbageCollectionDataSet resultGarbageCollectionDataSet = new GarbageCollectionDataSet();
 
+        long lastTime = -1;
 		for (GarbageCollectionEvent currCollectionEvent : allGarbageCollectionEvents) {
 			long currEventTime = currCollectionEvent.time.getTime();
 
+            if (currEventTime < lastTime){
+                System.out.println("wrong " + currEventTime + " last: " + lastTime + " diff: " + (currEventTime - lastTime));
+            }
+            lastTime = currEventTime;
+
 			HeapState heapAfterGc = currCollectionEvent.heapBeforeGC;
 			resultGarbageCollectionDataSet.fullGc.add(new DataSetEntry(currEventTime, heapAfterGc.fullGcCount));
-			resultGarbageCollectionDataSet.minorGc.add(new DataSetEntry(currEventTime, heapAfterGc.minorGcCount));
+            resultGarbageCollectionDataSet.minorGc.add(new DataSetEntry(currEventTime, heapAfterGc.minorGcCount));
 			if (currCollectionEvent.isStopTheWorld) {
 				compactingCollectionCount++;
 			}
