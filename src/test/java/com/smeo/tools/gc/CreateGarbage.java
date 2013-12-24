@@ -80,7 +80,7 @@ public class CreateGarbage {
     public static void main(String[] args) {
         CreateGarbage garbageCreator = new CreateGarbage();
         garbageCreator.addGarbageCreator(1000, (1024 * 1024));
-        garbageCreator.addGarbageCreator(0.001, (1024 * 1024));
+        garbageCreator.addGarbageCreator(0.0001, (1024 * 1024*5));
         garbageCreator.addGarbageCreator(0.01, (1024 * 1024));
         garbageCreator.addGarbageCreator(1, (1024 * 1024));
         garbageCreator.run();

@@ -97,6 +97,7 @@ public class GenericGCEventParserTest extends TestCase {
         assertEquals(1414472, event.tenuring.totalSpace[14]);
 
 
+
     }
 
 	public void testMinorCollection() {
