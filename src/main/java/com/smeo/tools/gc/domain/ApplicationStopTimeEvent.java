@@ -18,7 +18,7 @@ public class ApplicationStopTimeEvent {
 
 	@Override
 	public String toString() {
-		return "ApplicationStopTimeEvent [totalTimeApplicationsWhereStopped=" + totalTimeApplicationsWhereStoppedInSec + ", applicationTime="
+		return "ApplicationStopTimeEventParser [totalTimeApplicationsWhereStopped=" + totalTimeApplicationsWhereStoppedInSec + ", applicationTime="
 				+ totalTimeApplicationsWhereRunningInSec
 				+ "]";
 	}
