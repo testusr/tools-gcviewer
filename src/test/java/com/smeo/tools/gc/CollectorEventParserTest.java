@@ -1,16 +1,14 @@
 package com.smeo.tools.gc;
 
-import com.smeo.tools.gc.domain.GarbageCollectionEvent;
-import com.smeo.tools.gc.newparser.*;
-import com.smeo.tools.gc.newparser.domain.CollectionEvent;
+import com.smeo.tools.gc.newparser.CollectorEventParser;
+import com.smeo.tools.gc.newparser.GarbageCollector;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
-import com.smeo.tools.gc.newparser.domain.GcTiming;
 import junit.framework.TestCase;
 
 /**
  * Created by joachim on 25.12.13.
  */
-public class CollectionEventParserTest extends TestCase {
+public class CollectorEventParserTest extends TestCase {
 
     public void testCase1() {
         String logFile[] = {"2013-12-25T08:09:10.682+0100: 0.212: [GC",
@@ -26,14 +24,9 @@ public class CollectionEventParserTest extends TestCase {
                 "PSPermGen       total 21504K, used 2952K [0x00000000f9000000, 0x00000000fa500000, 0x00000000fe200000)",
                 "object space 21504K, 13% used [0x00000000f9000000,0x00000000f92e2118,0x00000000fa500000)" };
 
-        CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
-        verifyCollection(collectionEvent, true, false, GarbageCollector.PsYoungGen, null, null);
-
-        //[Times: user=0.02 sys=0.00, real=0.03 secs]
-        GcTiming gcTiming = GcTimingEventParser.parseGcEvent(logFile);
-        assertEquals(gcTiming.getUserTimeInSec(), 0.02);
-        assertEquals(gcTiming.getSysTimeInSec(), 0.00);
-        assertEquals(gcTiming.getRealTimInSec(), 0.03);
+        CollectorEvent[] collectorEvents = CollectorEventParser.parseGcEvents(logFile);
+        assertNull(collectorEvents[1]);
+        verifyCollection(collectorEvents[0], GarbageCollector.PsYoungGen, 8192, 736, 9216);
     }
 
     public void testCase2() {
@@ -42,9 +35,9 @@ public class CollectionEventParserTest extends TestCase {
                 "- age   1:   10485760 bytes,   10485760 total",
                 ": 92160K->10240K(92160K), 0.0302569 secs] 159852K->85199K(296960K), 0.0303246 secs] [Times: user=0.03 sys=0.00, real=0.03 secs]" };
 
-        CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
-        verifyCollection(collectionEvent, true, false, GarbageCollector.DefNew, null, null);
-
+        CollectorEvent[] collectorEvents = CollectorEventParser.parseGcEvents(logFile);
+        assertNull(collectorEvents[1]);
+        verifyCollection(collectorEvents[0], GarbageCollector.DefNew, 92160, 10240, 92160);
 
     }
 
@@ -61,24 +54,19 @@ public class CollectionEventParserTest extends TestCase {
                 "PSPermGen       total 21504K, used 2958K [0x00000000f9000000, 0x00000000fa500000, 0x00000000fe200000)",
                 "object space 21504K, 13% used [0x00000000f9000000,0x00000000f92e3960,0x00000000fa500000)",
                 "}" };
-        CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
-        verifyCollection(collectionEvent, false, false, GarbageCollector.PsYoungGen, GarbageCollector.ParOldGen, GarbageCollector.PSPermGen);
+        CollectorEvent[] collectorEvents = CollectorEventParser.parseGcEvents(logFile);
 
-
+        verifyCollection(collectorEvents[0], GarbageCollector.PsYoungGen, 384, 0, 9728);
+        verifyCollection(collectorEvents[1], GarbageCollector.ParOldGen, 20353, 4365, 20480);
+        verifyCollection(collectorEvents[2], GarbageCollector.PSPermGen, 2959, 2958, 21504);
     }
 
-    private void verifyCollection(CollectionEvent collectionEvent,
-                                  boolean isMinor, boolean isSystem,
-                                  GarbageCollector youngC, GarbageCollector oldC, GarbageCollector permC){
-        assertEquals(collectionEvent.isMinorCollection(), isMinor);
-        assertEquals(collectionEvent.isTriggeredBySystem(), isSystem);
-        if (isMinor){
-            assertNull(collectionEvent.getOldGenCollector());
-            assertNull(collectionEvent.getPermGenCollector());
-        } else{
-            assertEquals(youngC, collectionEvent.getYoungGenCollector().getCollect());
-            assertEquals(oldC, collectionEvent.getOldGenCollector().getCollect());
-            assertEquals(permC, collectionEvent.getPermGenCollector().getCollect());
-        }
+    private void verifyCollection(CollectorEvent collectorEvent, GarbageCollector expectedCollector, int before, int after, int available) {
+        assertEquals(collectorEvent.getCollect(), expectedCollector);
+        assertEquals(collectorEvent.getMemoryBefore().getUsedSpaceInK(), before);
+        assertEquals(collectorEvent.getMemoryBefore().getAvailableSpaceInK(), available);
+
+        assertEquals(collectorEvent.getMemoryAfter().getUsedSpaceInK(), after);
+        assertEquals(collectorEvent.getMemoryAfter().getAvailableSpaceInK(), available);
     }
 }

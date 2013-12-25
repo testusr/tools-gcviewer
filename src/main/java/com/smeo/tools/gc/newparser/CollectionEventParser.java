@@ -2,6 +2,7 @@ package com.smeo.tools.gc.newparser;
 
 import com.smeo.tools.gc.newparser.domain.CollectionEvent;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
+import com.smeo.tools.gc.newparser.domain.GcTiming;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,10 +12,19 @@ import com.smeo.tools.gc.newparser.domain.CollectorEvent;
  * To change this template use File | Settings | File Templates.
  */
 public class CollectionEventParser {
-    String majorCollectionPatter= "[Full GC";
-    String majorSystemCollectionPatter = "[Full GC (System)";
-    String minorCollectionPatter= "[GC";
-    public CollectionEvent parseGcEvent(String loggedEvent) {
+    private static final String majorCollectionPatter= "[Full GC";
+    private static final String majorSystemCollectionPatter = "[Full GC (System)";
+    private static final String minorCollectionPatter= "[GC";
+
+    public static CollectionEvent parseGcEvent(String[] gcLogLines) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String currString : gcLogLines){
+            stringBuilder.append(currString);
+        }
+        return parseGcEvent(stringBuilder.toString());
+    }
+
+    public static CollectionEvent parseGcEvent(String loggedEvent) {
         boolean isMinorCollection = !loggedEvent.contains(majorCollectionPatter);
         boolean isTriggeredBySystem = loggedEvent.contains(majorSystemCollectionPatter);
 
@@ -23,17 +33,20 @@ public class CollectionEventParser {
         CollectorEvent oldGenCollector = null;
         CollectorEvent permGenCollector = null;
         if (!isMinorCollection){
-            youngGenCollector = collectorEvents[0];
+            permGenCollector = collectorEvents[2];
             oldGenCollector = collectorEvents[1];
-            youngGenCollector = collectorEvents[2];
+            youngGenCollector = collectorEvents[0];
         } else {
-            permGenCollector = collectorEvents[0];
+            youngGenCollector = collectorEvents[0];
         }
+
+        GcTiming gcTiming = GcTimingEventParser.parseGcEvent(loggedEvent);
 
         return new CollectionEvent(isMinorCollection,
                 isTriggeredBySystem,
                 youngGenCollector,
                 oldGenCollector,
-                permGenCollector);
+                permGenCollector,
+                gcTiming);
     }
 }

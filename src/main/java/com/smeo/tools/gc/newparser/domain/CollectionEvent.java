@@ -11,11 +11,39 @@ public class CollectionEvent {
     private CollectorEvent oldGenCollector;
     private CollectorEvent permGenCollector;
 
-    public CollectionEvent(boolean isMinorCollection, boolean isTriggeredBySystem, CollectorEvent youngGenCollector, CollectorEvent oldGenCollector, CollectorEvent permGenCollector) {
+    private GcTiming gcTiming;
+
+    public CollectionEvent(boolean isMinorCollection, boolean isTriggeredBySystem, CollectorEvent youngGenCollector,
+                           CollectorEvent oldGenCollector, CollectorEvent permGenCollector, GcTiming gcTiming) {
         this.isMinorCollection = isMinorCollection;
         this.isTriggeredBySystem = isTriggeredBySystem;
         this.youngGenCollector = youngGenCollector;
         this.oldGenCollector = oldGenCollector;
         this.permGenCollector = permGenCollector;
+        this.gcTiming = gcTiming;
+    }
+
+    public boolean isMinorCollection() {
+        return isMinorCollection;
+    }
+
+    public boolean isTriggeredBySystem() {
+        return isTriggeredBySystem;
+    }
+
+    public CollectorEvent getYoungGenCollector() {
+        return youngGenCollector;
+    }
+
+    public CollectorEvent getOldGenCollector() {
+        return oldGenCollector;
+    }
+
+    public CollectorEvent getPermGenCollector() {
+        return permGenCollector;
+    }
+
+    public GcTiming getGcTiming() {
+        return gcTiming;
     }
 }
