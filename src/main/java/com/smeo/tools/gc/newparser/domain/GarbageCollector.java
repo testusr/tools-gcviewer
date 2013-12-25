@@ -1,4 +1,4 @@
-package com.smeo.tools.gc.newparser;
+package com.smeo.tools.gc.newparser.domain;
 
 /**
  * Created with IntelliJ IDEA.

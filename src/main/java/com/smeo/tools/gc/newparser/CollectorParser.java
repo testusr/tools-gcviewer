@@ -1,5 +1,7 @@
 package com.smeo.tools.gc.newparser;
 
+import com.smeo.tools.gc.newparser.domain.GarbageCollector;
+
 /**
  * Created with IntelliJ IDEA.
  * User: smeo

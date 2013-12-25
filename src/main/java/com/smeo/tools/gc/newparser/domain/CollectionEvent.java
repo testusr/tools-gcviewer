@@ -3,7 +3,7 @@ package com.smeo.tools.gc.newparser.domain;
 /**
  * Created by joachim on 25.12.13.
  */
-public class CollectionEvent {
+public class CollectionEvent  extends GcLoggedEvent {
     private boolean isMinorCollection;
     private boolean isTriggeredBySystem;
 

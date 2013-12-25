@@ -1,7 +1,6 @@
 package com.smeo.tools.gc.newparser.domain;
 
 import com.smeo.tools.gc.domain.MemorySpace;
-import com.smeo.tools.gc.newparser.GarbageCollector;
 
 /**
  * Created by joachim on 25.12.13.

@@ -1,12 +1,14 @@
-package com.smeo.tools.gc.newparser;
+package com.smeo.tools.gc.newparser.domain;
 
 /**
  * Created with IntelliJ IDEA.
  * User: smeo
  * Date: 12/24/13
- * Time: 2:01 PM
+ * Time: 2:18 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GcElementParser {
-    boolean needsMoreInfo(String loggedLine);
+public enum MemorySegment{
+    PermGen,
+    OldGen,
+    YoungGen
 }

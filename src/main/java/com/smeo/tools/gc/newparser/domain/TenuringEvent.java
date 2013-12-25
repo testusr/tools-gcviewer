@@ -3,7 +3,7 @@ package com.smeo.tools.gc.newparser.domain;
 /**
  * Created by joachim on 25.12.13.
  */
-public class TenuringEvent {
+public class TenuringEvent  extends GcLoggedEvent {
     public static int MAX_AGE = 15;
     public int newThreshold;
     public int max;

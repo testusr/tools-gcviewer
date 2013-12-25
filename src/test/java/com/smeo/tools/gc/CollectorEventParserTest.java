@@ -1,7 +1,7 @@
 package com.smeo.tools.gc;
 
 import com.smeo.tools.gc.newparser.CollectorEventParser;
-import com.smeo.tools.gc.newparser.GarbageCollector;
+import com.smeo.tools.gc.newparser.domain.GarbageCollector;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import junit.framework.TestCase;
 

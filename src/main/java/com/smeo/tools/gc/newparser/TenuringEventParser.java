@@ -14,6 +14,7 @@ public class TenuringEventParser {
     private final static Pattern initLinePattern = Pattern.compile("Desired survivor size [0-9]+ bytes, new threshold [0-9]+ \\(max [0-9]+");
     //"- age   1:     832928 bytes,     832928 total"
     private final static Pattern agePattern = Pattern.compile("- age[ ]+[0-9]+: *[0-9]+ bytes, *[0-9]+ *total");
+
     public static TenuringEvent parseGcEvents(String[] gcLogLines) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String currString : gcLogLines){
@@ -22,7 +23,7 @@ public class TenuringEventParser {
         return parseGcEvents(stringBuilder.toString());
     }
 
-    private static TenuringEvent parseGcEvents(String logFile) {
+    public static TenuringEvent parseGcEvents(String logFile) {
         Matcher initLineMatcher = initLinePattern.matcher(logFile);
 
         if (initLineMatcher.find()){

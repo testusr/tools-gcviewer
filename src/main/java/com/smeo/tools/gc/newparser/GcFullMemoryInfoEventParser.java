@@ -1,6 +1,7 @@
 package com.smeo.tools.gc.newparser;
 
 import com.smeo.tools.gc.newparser.domain.FullMemoryInfo;
+import com.smeo.tools.gc.newparser.domain.GarbageCollector;
 import com.smeo.tools.gc.newparser.domain.GcFullMemoryInfoEvent;
 import com.smeo.tools.gc.newparser.domain.MemorySpaceInfo;
 
