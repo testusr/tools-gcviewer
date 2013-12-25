@@ -16,11 +16,12 @@ public class AllEventsParser {
     private StringBuilder stringBuilder = new StringBuilder();
 
     private List<GcLoggedEvent> loggedEvents = new ArrayList<GcLoggedEvent>();
+    boolean gotTimeStamp = false;
 
     public void parseLine(String loggedLine){
         try {
+
             if (currentTimeTracker.extractLoggedTime(loggedLine)){
-                stringBuilder.append(loggedLine);
                 String loggedEvents = stringBuilder.toString();
                 addEvent(ApplicationStopTimeEventParser.parseGcRunTimeEvents(loggedEvents));
                 addEvent(ApplicationStopTimeEventParser.parseGcStopTimeEvents(loggedEvents));
@@ -29,6 +30,7 @@ public class AllEventsParser {
                 addEvent(CollectionEventParser.parseGcEvent(loggedEvents));
                 stringBuilder = new StringBuilder();
             }
+            stringBuilder.append(loggedLine);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

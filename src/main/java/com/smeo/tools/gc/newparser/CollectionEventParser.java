@@ -25,6 +25,11 @@ public class CollectionEventParser {
     }
 
     public static CollectionEvent parseGcEvent(String loggedEvent) {
+        if (!loggedEvent.contains(majorCollectionPatter)
+                && !loggedEvent.contains(majorSystemCollectionPatter)
+                && !loggedEvent.contains(minorCollectionPatter)){
+            return null;
+        }
         boolean isMinorCollection = !loggedEvent.contains(majorCollectionPatter);
         boolean isTriggeredBySystem = loggedEvent.contains(majorSystemCollectionPatter);
 
