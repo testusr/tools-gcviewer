@@ -1,9 +1,7 @@
 package com.smeo.tools.gc;
 
-import com.smeo.tools.gc.domain.GarbageCollectionEvent;
 import com.smeo.tools.gc.newparser.*;
 import com.smeo.tools.gc.newparser.domain.CollectionEvent;
-import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import com.smeo.tools.gc.newparser.domain.GcTiming;
 import junit.framework.TestCase;
 
@@ -30,10 +28,14 @@ public class CollectionEventParserTest extends TestCase {
         verifyCollection(collectionEvent, true, false, GarbageCollector.PsYoungGen, null, null);
 
         //[Times: user=0.02 sys=0.00, real=0.03 secs]
-        GcTiming gcTiming = GcTimingEventParser.parseGcEvent(logFile);
-        assertEquals(gcTiming.getUserTimeInSec(), 0.02);
-        assertEquals(gcTiming.getSysTimeInSec(), 0.00);
-        assertEquals(gcTiming.getRealTimInSec(), 0.03);
+        validateTiming(collectionEvent, 0.02, 0.00, 0.03);
+    }
+
+    private void validateTiming(CollectionEvent collectionEvent, double usr, double sys, double real) {
+        GcTiming gcTiming = collectionEvent.getGcTiming();
+        assertEquals(gcTiming.getUserTimeInSec(), usr);
+        assertEquals(gcTiming.getSysTimeInSec(), sys);
+        assertEquals(gcTiming.getRealTimInSec(), real);
     }
 
     public void testCase2() {
@@ -44,7 +46,7 @@ public class CollectionEventParserTest extends TestCase {
 
         CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
         verifyCollection(collectionEvent, true, false, GarbageCollector.DefNew, null, null);
-
+        validateTiming(collectionEvent, 0.03, 0.00, 0.03);
 
     }
 
@@ -63,7 +65,7 @@ public class CollectionEventParserTest extends TestCase {
                 "}" };
         CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
         verifyCollection(collectionEvent, false, false, GarbageCollector.PsYoungGen, GarbageCollector.ParOldGen, GarbageCollector.PSPermGen);
-
+        validateTiming(collectionEvent, 0.03, 0.00, 0.04);
 
     }
 
