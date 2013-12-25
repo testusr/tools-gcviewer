@@ -1,5 +1,8 @@
 package com.smeo.tools.gc.newparser;
 
+import com.smeo.tools.gc.newparser.domain.CollectionEvent;
+import com.smeo.tools.gc.newparser.domain.CollectorEvent;
+
 /**
  * Created with IntelliJ IDEA.
  * User: smeo
@@ -7,16 +10,30 @@ package com.smeo.tools.gc.newparser;
  * Time: 2:36 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CollectionEventParser implements GcElementParser {
-    public boolean isMajorCollection;
-    public boolean isSystemTriggered;
+public class CollectionEventParser {
+    String majorCollectionPatter= "[Full GC";
+    String majorSystemCollectionPatter = "[Full GC (System)";
+    String minorCollectionPatter= "[GC";
+    public CollectionEvent parseGcEvent(String loggedEvent) {
+        boolean isMinorCollection = !loggedEvent.contains(majorCollectionPatter);
+        boolean isTriggeredBySystem = loggedEvent.contains(majorSystemCollectionPatter);
 
-    CollectorEventParser youngGenCollector;
-    CollectorEventParser oldGenCollector;
-    CollectorEventParser permGenCollector;
+        CollectorEvent[] collectorEvents = CollectorEventParser.parseGcEvents(loggedEvent);
+        CollectorEvent youngGenCollector = null;
+        CollectorEvent oldGenCollector = null;
+        CollectorEvent permGenCollector = null;
+        if (!isMinorCollection){
+            youngGenCollector = collectorEvents[0];
+            oldGenCollector = collectorEvents[1];
+            youngGenCollector = collectorEvents[2];
+        } else {
+            permGenCollector = collectorEvents[0];
+        }
 
-    @Override
-    public boolean needsMoreInfo(String loggedLine) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return new CollectionEvent(isMinorCollection,
+                isTriggeredBySystem,
+                youngGenCollector,
+                oldGenCollector,
+                permGenCollector);
     }
 }

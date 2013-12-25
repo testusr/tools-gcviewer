@@ -8,9 +8,11 @@ package com.smeo.tools.gc.newparser;
  * To change this template use File | Settings | File Templates.
  */
 public enum GarbageCollector {
+    ParNew(MemorySegment.YoungGen, "ParNew"),
     DefNew(MemorySegment.YoungGen, "DefNew"),
     PsYoungGen(MemorySegment.YoungGen,"PSYoungGen"),
     PSOldGen(MemorySegment.OldGen, "PSOldGen"),
+    ParOldGen(MemorySegment.OldGen, "ParOldGen"),
     PSPermGen(MemorySegment.PermGen, "PSPermGen"),
     Tenured(MemorySegment.OldGen, "Tenured"),
     CMSTenured(MemorySegment.OldGen, "OldGen"),
@@ -31,4 +33,12 @@ public enum GarbageCollector {
         return logFilePrefix;
     }
 
+    public static GarbageCollector fromString(String string) {
+        for (GarbageCollector currGc : values()){
+            if (string.contains(currGc.getLogFilePrefix())){
+                return currGc;
+            }
+        }
+        throw new IllegalArgumentException("could not creat GarbageCollector from string '"+ string + "'");
+    }
 }
