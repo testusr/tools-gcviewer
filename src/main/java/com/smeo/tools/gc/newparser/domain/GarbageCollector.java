@@ -33,6 +33,10 @@ public enum GarbageCollector {
         return logFilePrefix;
     }
 
+    public MemorySegment getMemorySegment() {
+        return memorySegment;
+    }
+
     public static GarbageCollector fromString(String string) {
         for (GarbageCollector currGc : values()){
             if (string.contains(currGc.getLogFilePrefix())){
