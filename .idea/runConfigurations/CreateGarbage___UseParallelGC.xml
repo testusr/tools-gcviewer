@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CreateGarbage - UseParallelGC" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.smeo.tools.gc.CreateGarbage" />
-    <option name="VM_PARAMETERS" value="-XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -Xloggc:c:\temp\gc.log -Xms30m -Xmx30m -XX:+UseParallelGC   " />
+    <option name="VM_PARAMETERS" value="-XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -Xloggc:/tmp/gc.log -Xms50m -Xmx50m -XX:+UseParallelGC   " />
     <option name="PROGRAM_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />

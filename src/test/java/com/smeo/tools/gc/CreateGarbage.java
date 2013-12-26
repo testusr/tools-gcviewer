@@ -13,15 +13,19 @@ import java.util.concurrent.TimeUnit;
 public class CreateGarbage {
     private ArrayList<GarbageCreator> garbageCreators = new ArrayList<GarbageCreator>();
 
-    public void addGarbageCreator(double objectLiveTimeMs, long bytesPerSecond){
-        garbageCreators.add(new GarbageCreator(objectLiveTimeMs, bytesPerSecond, bytesPerSecond/1024));
+    public void addGarbageCreator(double objectLiveTimeMs, long bytesPerSecond) {
+        addTempGarbageCreator(0, 0, objectLiveTimeMs, bytesPerSecond);
     }
 
-    public void run(){
-        while (true){
-        for (GarbageCreator currGarbageCreator : garbageCreators) {
-            currGarbageCreator.update();
-        }
+    private void addTempGarbageCreator(long startTime, int runTime, double objectLiveTimeMs, long bytesPerSecond) {
+        garbageCreators.add(new GarbageCreator(garbageCreators.size(), startTime, runTime, objectLiveTimeMs, bytesPerSecond));
+    }
+
+    public void run() {
+        while (true) {
+            for (GarbageCreator currGarbageCreator : garbageCreators) {
+                currGarbageCreator.update();
+            }
         }
     }
 
@@ -34,30 +38,54 @@ public class CreateGarbage {
 
         long nextObjectCreationCycleNanoTime = -1;
         long objectCreationFrequencyInNs = 1;
+        long startTime;
+        long endTime = Long.MAX_VALUE;
 
-        private GarbageCreator(double objectLiveTimeMs, long bytesPerSecond, long objectCreationFrequencyInNs) {
-            this.objectCreationFrequencyInNs = objectCreationFrequencyInNs;
+        boolean active = false;
+        int id;
+
+        private GarbageCreator(int id, long startTime, long runtime, double objectLiveTimeMs, long bytesPerSecond) {
+            this.objectCreationFrequencyInNs = TimeUnit.SECONDS.toNanos(1) / (bytesPerSecond / 2048);
             this.nextObjectCreationCycleNanoTime = System.nanoTime();
-            this.objectLiveTimeNs = (long)(objectLiveTimeMs * 1000000);
-            this.bytesPerCycle = (int)((bytesPerSecond / 1000000.0) * objectCreationFrequencyInNs);
+            this.objectLiveTimeNs = (long) (objectLiveTimeMs * 1000000);
+            this.bytesPerCycle = 1024;
+            this.id = id;
 
-            System.out.println("cycle: " + objectCreationFrequencyInNs + "ns bytes: " + bytesPerCycle);
+            this.startTime = System.currentTimeMillis() + startTime;
+            if (runtime > 0) {
+                this.endTime = this.startTime + runtime;
+            }
+
+            System.out.println("[" + id + "] cycle: " + objectCreationFrequencyInNs + "ns bytes: " + bytesPerCycle);
         }
 
-        public void update(){
+        public void update() {
+            if (System.currentTimeMillis() > startTime && System.currentTimeMillis() < endTime) {
+                if (!active) {
+                    System.out.println("[" + id + "] getting active");
+                    active = true;
+                }
+                createObjectsIfNecessary();
+            }
+            else {
+                if (active){
+                System.out.println("[" + id + "] getting inactive");
+                }
+                active = false;
+            }
             cleanExpiredObjects();
-            createObjectsIfNecessary();
         }
 
         private void createObjectsIfNecessary() {
-            if (System.nanoTime() >= nextObjectCreationCycleNanoTime){
+            if (System.nanoTime() >= nextObjectCreationCycleNanoTime) {
                 memoryBlockList.add(new MemoryBlock(System.nanoTime() + objectLiveTimeNs, bytesPerCycle));
+                this.nextObjectCreationCycleNanoTime += objectCreationFrequencyInNs;
             }
         }
 
         private void cleanExpiredObjects() {
-            for (int i=(memoryBlockList.size()-1); i > 0 ; i--){
-                if (System.nanoTime() >=  memoryBlockList.get(i).expirationTimeInNs){
+            for (int i = (memoryBlockList.size() - 1); i > 0; i--) {
+                if (System.nanoTime() >= memoryBlockList.get(i).expirationTimeInNs) {
                     memoryBlockList.remove(i);
                 }
             }
@@ -70,7 +98,7 @@ public class CreateGarbage {
             public MemoryBlock(long expirationTimeInNs, int bytesPerCycle) {
                 this.expirationTimeInNs = expirationTimeInNs;
                 content = new byte[bytesPerCycle];
-                for (int i = 0; i < bytesPerCycle; i++){
+                for (int i = 0; i < bytesPerCycle; i++) {
                     content[i] = 2;
                 }
             }
@@ -79,11 +107,21 @@ public class CreateGarbage {
 
     public static void main(String[] args) {
         CreateGarbage garbageCreator = new CreateGarbage();
-        garbageCreator.addGarbageCreator(1000, (1024 * 1024));
-        garbageCreator.addGarbageCreator(0.0001, (1024 * 1024*5));
-        garbageCreator.addGarbageCreator(0.01, (1024 * 1024));
-        garbageCreator.addGarbageCreator(1, (1024 * 1024));
+        garbageCreator.addTempGarbageCreator(0, 20000, 10, (1024 * 1024 * 1024));
+        garbageCreator.addTempGarbageCreator(5000, 15000, 100, (1024 * 1024 * 1024));
+        garbageCreator.addTempGarbageCreator(10000, 10000, 150, (1024 * 1024 * 1024));
+
+        garbageCreator.addTempGarbageCreator(30000, 30000, 2000, (1024 * 1024 * 10));
+        garbageCreator.addTempGarbageCreator(30000, 30000, 10, (1024 * 1024 * 1024));
+        garbageCreator.addTempGarbageCreator(35000, 15000, 100, (1024 * 1024 * 1024));
+        garbageCreator.addTempGarbageCreator(40000, 10000, 150, (1024 * 1024 * 1024));
+
+        garbageCreator.addTempGarbageCreator(50000, 50000, 10, (1024 * 1024 * 1024));
+
+
+
         garbageCreator.run();
     }
+
 
 }
