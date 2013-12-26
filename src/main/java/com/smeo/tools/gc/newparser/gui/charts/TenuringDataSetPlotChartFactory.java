@@ -86,7 +86,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
 
     public static JFreeChart createTotalAgeDistributionChart(TenuringDataSetFactory.TenuringDataSet tenuringDataSet) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Tenuring (kB)",
+                "Tenuring (available/kB)",
                 "Time of Day",
                 "Primary Range Axis",
                 null,
