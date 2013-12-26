@@ -52,7 +52,6 @@ public class CollectorEventParser {
               patter.append("|");
             }
         }
-        System.out.println(patter.toString());
 
         return Pattern.compile(patter.toString());
     }

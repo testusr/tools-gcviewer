@@ -27,4 +27,40 @@ public class FullMemoryInfo {
         this.permGenCollector = permGenCollector;
         this.perObjectSpace = perObjectSpace;
     }
+
+    public GarbageCollector getYoungGenCollector() {
+        return youngGenCollector;
+    }
+
+    public MemorySpaceInfo getYoungTotalSpace() {
+        return youngTotalSpace;
+    }
+
+    public MemorySpaceInfo getEdenSize() {
+        return edenSize;
+    }
+
+    public MemorySpaceInfo getFromSurvivor() {
+        return fromSurvivor;
+    }
+
+    public MemorySpaceInfo getToSurvivor() {
+        return toSurvivor;
+    }
+
+    public GarbageCollector getOldGenCollector() {
+        return oldGenCollector;
+    }
+
+    public MemorySpaceInfo getOldObjectSpace() {
+        return oldObjectSpace;
+    }
+
+    public GarbageCollector getPermGenCollector() {
+        return permGenCollector;
+    }
+
+    public MemorySpaceInfo getPerObjectSpace() {
+        return perObjectSpace;
+    }
 }

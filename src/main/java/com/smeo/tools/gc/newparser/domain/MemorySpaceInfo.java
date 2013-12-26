@@ -4,6 +4,7 @@ package com.smeo.tools.gc.newparser.domain;
  * Created by joachim on 25.12.13.
  */
 public class MemorySpaceInfo {
+    public static final MemorySpaceInfo UNDEFINED = new MemorySpaceInfo(-1,-1,0.0f);
     private final int size;
     private final int used;
     private final float usedPerc;

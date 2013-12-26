@@ -16,12 +16,42 @@ public class AllEventsParser {
     private StringBuilder stringBuilder = new StringBuilder();
 
     private List<GcLoggedEvent> loggedEvents = new ArrayList<GcLoggedEvent>();
-    boolean gotTimeStamp = false;
+    private boolean hasTenuringDistributions = false;
+    private boolean hasApplicationStopTime = false;
+    private boolean hasDateTimeStamp = false;
+    private boolean hasGcDetails = false;
+    private boolean hasFullGcDetails = false;
 
-    public void parseLine(String loggedLine){
+
+    public List<GcLoggedEvent> getLoggedEvents() {
+        return loggedEvents;
+    }
+
+    public boolean isHasTenuringDistributions() {
+        return hasTenuringDistributions;
+    }
+
+    public boolean isHasApplicationStopTime() {
+        return hasApplicationStopTime;
+    }
+
+    public boolean isHasDateTimeStamp() {
+        return hasDateTimeStamp;
+    }
+
+    public boolean isHasGcDetails() {
+        return hasGcDetails;
+    }
+
+    public boolean isHasFullGcDetails() {
+        return hasFullGcDetails;
+    }
+
+    public void parseLine(String loggedLine) {
         try {
 
-            if (currentTimeTracker.extractLoggedTime(loggedLine)){
+            if (currentTimeTracker.extractLoggedTime(loggedLine)) {
+                hasDateTimeStamp = true;
                 String loggedEvents = stringBuilder.toString();
                 addEvent(ApplicationStopTimeEventParser.parseGcRunTimeEvents(loggedEvents));
                 addEvent(ApplicationStopTimeEventParser.parseGcStopTimeEvents(loggedEvents));
@@ -40,13 +70,38 @@ public class AllEventsParser {
 
 
     private void addEvent(GcLoggedEvent applicationTimeEvent) {
-        if (applicationTimeEvent != null){
-          loggedEvents.add(currentTimeTracker.updateGcEventTiming(applicationTimeEvent));
+        if (applicationTimeEvent != null) {
+            if (applicationTimeEvent instanceof TenuringEvent) {
+                hasTenuringDistributions = true;
+            }
+            if (applicationTimeEvent instanceof ApplicationStopTimeEvent) {
+                hasApplicationStopTime = true;
+            }
+            if (applicationTimeEvent instanceof CollectionEvent) {
+                hasGcDetails = true;
+            }
+            if (applicationTimeEvent instanceof GcFullMemoryInfoEvent) {
+                hasFullGcDetails = true;
+            }
+
+            loggedEvents.add(currentTimeTracker.updateGcEventTiming(applicationTimeEvent));
         }
     }
+
     private void addEvent(GcLoggedEvent[] applicationTimeEvents) {
-        for (GcLoggedEvent currEvent : applicationTimeEvents){
+        for (GcLoggedEvent currEvent : applicationTimeEvents) {
             addEvent(currEvent);
         }
+    }
+
+    public String getContentSummary() {
+        return "AllEventsParser{" +
+                "\nhasTenuringDistributions=" + hasTenuringDistributions +
+                "\n, hasApplicationStopTime=" + hasApplicationStopTime +
+                "\n, hasDateTimeStamp=" + hasDateTimeStamp +
+                "\n, hasGcDetails=" + hasGcDetails +
+                "\n, hasFullGcDetails=" + hasFullGcDetails +
+                "\n, readEvents=" +  loggedEvents.size()+
+                "\n}";
     }
 }
