@@ -32,11 +32,11 @@ public class GarbaceCollectionCountChartFactory extends PlotChartFactory {
 		plot.setRangeGridlinePaint(Color.white);
 
 		TimeSeriesCollection fullGcTimeSeriesCollection = new TimeSeriesCollection();
-		fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("fullGc", infoDataSet.fullGc));
-		fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("compactingGc", infoDataSet.compactingGc));
+		fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("majorGc", infoDataSet.majorGc));
+        fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("systemTriggered", infoDataSet.systemTriggered));
 		AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, fullGcTimeSeriesCollection, "full gc count", false, -1, true);
-		renderer.setSeriesPaint(0, Color.green);
-		renderer.setSeriesPaint(1, Color.red);
+		renderer.setSeriesPaint(0, Color.red);
+		renderer.setSeriesPaint(1, Color.black);
 
 		TimeSeriesCollection minorGcTimeSeriesCollection = new TimeSeriesCollection();
 		minorGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("minorGc", infoDataSet.minorGc));
