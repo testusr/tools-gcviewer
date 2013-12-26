@@ -68,6 +68,7 @@ public class GcFullMemoryInfoEventParser {
     }
 
     private FullMemoryInfo createFullMemoryInfo(String loggedEvent) {
+        try {
         Matcher infoEventMatcher = infoEventPattern.matcher(loggedEvent);
         String headline = getNext(infoEventMatcher);
         String youngGenHead = getNext(infoEventMatcher);
@@ -89,6 +90,10 @@ public class GcFullMemoryInfoEventParser {
                 extractMemorySpace(oldGenObjSpace),
                 extractCollector(permGenHead),
                 extractMemorySpace(permGenObjSpace));
+        } catch (IllegalArgumentException e){
+            System.out.println("Could not read perm gen info for FullMemoryInfo ... most likely CMS Version has to be fixed");
+        }
+        return null;
     }
 
     private MemorySpaceInfo extractTotalMemorySpace(String youngGenHead) {
