@@ -1,7 +1,7 @@
 package com.smeo.tools.gc.newparser.gui.charts;
 
 import com.smeo.tools.charts.PlotChartFactory;
-import com.smeo.tools.gc.newparser.gui.charts.dataset.MemoryDataSetFactory;
+import com.smeo.tools.gc.newparser.gui.charts.dataset.AbstractMemoryDataSetFactory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -13,7 +13,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import java.awt.*;
 
 public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
-	public JFreeChart createChart(MemoryDataSetFactory.MemoryInfoDataSet infoDataSet, String name, boolean usedSpace, boolean incomingMem, boolean totalMemory) {
+	public JFreeChart createChart(AbstractMemoryDataSetFactory.MemoryInfoDataSet infoDataSet, String name, boolean usedSpace, boolean incomingMem, boolean totalMemory) {
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(
 				name,
 				"Time of Day",
@@ -33,29 +33,31 @@ public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
 
         int seriesId = 0;
 
-        if (usedSpace) {
-            TimeSeriesCollection percentageGraphCollection = new TimeSeriesCollection();
-            percentageGraphCollection.addSeries(createBigDecimalTimeSeries("usedSpace(%)", infoDataSet.beforeGcUsedPerc));
-            AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, seriesId, percentageGraphCollection, "usedSpace", false, 100.0, true);
-            renderer.setSeriesPaint(seriesId, Color.yellow);
-            seriesId++;
-        }
+
 
         TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
         AbstractXYItemRenderer memoryTrafficRenderer = null;
 
         if (incomingMem) {
-			memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("incomingMemory(s)", infoDataSet.incomingDataRate));
-			memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "memoryTraffic(kB)", false, 500000.0, true);
-            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.green);
+			memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("incomingDataInK(s)", infoDataSet.incomingDataInK));
+			memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "memoryTraffic(kB)", false, -1, true);
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.yellow);
             seriesId++;
 		}
         if (totalMemory) {
-            memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("maxMemory", infoDataSet.totalMemory));
+            memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("availableSpaceInK", infoDataSet.availableSpaceInK));
             if (memoryTrafficRenderer == null){
             memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "maxSpace", false, -1, true);
             }
-            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.blue);
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.green);
+            seriesId++;
+        }
+        if (usedSpace) {
+            memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("usedSpace(K)", infoDataSet.usedSpaceInK));
+            if (memoryTrafficRenderer == null){
+                memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "maxSpace", false, -1, true);
+            }
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.red);
             seriesId++;
         }
 

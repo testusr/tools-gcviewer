@@ -11,10 +11,7 @@ import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;
 import com.smeo.tools.gc.newparser.gui.charts.GarbaceCollectionCountChartFactory;
 import com.smeo.tools.gc.newparser.gui.charts.MemoryInfoDataSetPlotChartFactory;
 import com.smeo.tools.gc.newparser.gui.charts.TenuringDataSetPlotChartFactory;
-import com.smeo.tools.gc.newparser.gui.charts.dataset.MemoryDataSetFactory;
-import com.smeo.tools.gc.newparser.gui.charts.dataset.StopTimeDataSetFactory;
-import com.smeo.tools.gc.newparser.gui.charts.dataset.SurvivorInputOutputDataSetFactory;
-import com.smeo.tools.gc.newparser.gui.charts.dataset.TenuringDataSetFactory;
+import com.smeo.tools.gc.newparser.gui.charts.dataset.*;
 import com.smeo.tools.gc.parser.GcLogParser;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -221,7 +218,6 @@ public class VisualGc {
     public void start(){
         readLogFile();
         if (allEventsParser.isHasFullGcDetails()){
-
             createAnddAddGcDetailsCharts(allEventsParser.getLoggedEvents());
         } else {
             createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
@@ -241,40 +237,37 @@ public class VisualGc {
     }
 
     private void createAnddAddGcDetailsCharts(List<GcLoggedEvent> loggedEvents) {
-        MemoryInfoDataSetPlotChartFactory memoryInfoDataSetPlotChart = new MemoryInfoDataSetPlotChartFactory();
-
-//        try {
-//            JFreeChart totalMemoryChart = memoryInfoDataSetPlotChart.createChart(
-//                    dataSetFactory.createTotalMemoryDataSets(loggedEvents, intervalInMs), "TotalSpace", false, true, true);
-//            addChart(totalMemoryChart);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            JFreeChart  edenSpaceChart = memoryInfoDataSetPlotChart.createChart(
-//                    dataSetFactory.createEdenMemoryDataSets(loggedEvents, intervalInMs), "EdenSpace", false, false, true);
-//            addChart(edenSpaceChart);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            JFreeChart  survivorSpaceChart = memoryInfoDataSetPlotChart.createChart(
-//                    dataSetFactory.createUsedSurvivorMemoryDataSets(loggedEvents, intervalInMs), "SurvivorSpace", true, false, false);
-//            addChart(survivorSpaceChart);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            JFreeChart  oldGenSpaceChart = memoryInfoDataSetPlotChart.createChart(
-//                    dataSetFactory.createOldGenMemoryDataSets(loggedEvents, intervalInMs), "OldGenSpace", true, true, true);
-//            addChart(oldGenSpaceChart);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
     }
 
     private void createAndAddRegularCollectionCharts(List<GcLoggedEvent> loggedEvents) {
+        System.out.println("...creating plots based on regular collections events");
+        MemoryInfoDataSetPlotChartFactory memoryInfoDataSetPlotChart = new MemoryInfoDataSetPlotChartFactory();
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createOldGenMemoryDataSets(loggedEvents), "OldGen", true, true, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createYoungGenMemoryDataSets(loggedEvents), "YoungGen", true, true, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createPermGenMemoryDataSets(loggedEvents), "PermGen", true, true, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void createAndAddApplicationStopTimeChart(List<GcLoggedEvent> loggedEvents) {

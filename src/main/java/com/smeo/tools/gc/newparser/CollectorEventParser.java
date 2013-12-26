@@ -1,8 +1,8 @@
 package com.smeo.tools.gc.newparser;
 
-import com.smeo.tools.gc.domain.MemorySpace;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import com.smeo.tools.gc.newparser.domain.GarbageCollector;
+import com.smeo.tools.gc.newparser.domain.MemorySpace;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
