@@ -166,10 +166,10 @@ public class VisualGc {
         }
     }
 
-    private void initMovingDomainMarker(List<GarbageCollectionEvent> allGarbageCollectionEvents, JFreeChart... charts) {
+    private void initMovingDomainMarker(List<GcLoggedEvent> allGarbageCollectionEvents, JFreeChart... charts) {
         long halfRangeTimeInMs = 0;
         if (allGarbageCollectionEvents.size() > 0) {
-            halfRangeTimeInMs = allGarbageCollectionEvents.get(allGarbageCollectionEvents.size() / 2).time.getTime();
+            halfRangeTimeInMs = allGarbageCollectionEvents.get(allGarbageCollectionEvents.size() / 2).getTimestamp();
         }
         movingDomainMarker = new MovingDomainMarker(halfRangeTimeInMs, charts);
     }
@@ -230,7 +230,7 @@ public class VisualGc {
         }
         JFreeChart[] chartsArray = charts.toArray(new JFreeChart[0]);
         ChartUtility.linkChartZoom(chartsArray);
-       // initMovingDomainMarker(allGarbageCollectionEvents, chartsArray);
+        initMovingDomainMarker(allEventsParser.getLoggedEvents(), chartsArray);
 
         showChart(chartsArray);
 
@@ -253,7 +253,7 @@ public class VisualGc {
 
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
-                    CollectionEventBasedMemoryDSFactory.createYoungGenMemoryDataSets(loggedEvents), "YoungGen", true, true, true);
+                    CollectionEventBasedMemoryDSFactory.createYoungGenMemoryDataSets(loggedEvents), "YoungGen", true, false, true);
             addChart(oldGenChart);
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,6 +262,14 @@ public class VisualGc {
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
                     CollectionEventBasedMemoryDSFactory.createPermGenMemoryDataSets(loggedEvents), "PermGen", true, true, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createTotalGenMemoryDataSets(loggedEvents), "AllGen", true, false, true);
             addChart(oldGenChart);
         } catch (Exception e) {
             e.printStackTrace();

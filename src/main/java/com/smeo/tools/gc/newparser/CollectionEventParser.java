@@ -45,6 +45,8 @@ public class CollectionEventParser {
             youngGenCollector = collectorEvents[0];
         }
 
+        CollectorEvent totalCollectionValues = CollectorEventParser.parseTotalGcEventValues(loggedEvent);
+
         GcTiming gcTiming = GcTimingEventParser.parseGcEvent(loggedEvent);
 
         return new CollectionEvent(isMinorCollection,
@@ -52,6 +54,7 @@ public class CollectionEventParser {
                 youngGenCollector,
                 oldGenCollector,
                 permGenCollector,
+                totalCollectionValues,
                 gcTiming);
     }
 }

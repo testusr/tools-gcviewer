@@ -16,9 +16,25 @@ import java.util.regex.Pattern;
  */
 public class CollectorEventParser {
     // [OldGen: 204799K->204799K(204800K)
+    private static final String knumbersRegexp = "[0-9]+K->[0-9]+K\\([0-9]+K\\)";
+    private static final Pattern valuePattern = Pattern.compile("\\: " + knumbersRegexp);
+    private static final Pattern totalCollectionValuePatter =  Pattern.compile("secs\\] " + knumbersRegexp);
 
+    public static CollectorEvent parseTotalGcEventValues(String gcLogLine){
+        Matcher valueMatcher = totalCollectionValuePatter.matcher(gcLogLine);
+        int i =0;
+        while (valueMatcher.find()) {
+            Integer values[] = LogParseUtils.extractKNumbers(valueMatcher.group());
+            return new CollectorEvent(null,
+                    new MemorySpace(values[0], values[2]),
+                    new MemorySpace(values[1], values[2])
+            );
+        }
+        return null;
+
+
+    }
     public static CollectorEvent[] parseGcEvents(String gcLogLine) {
-        Pattern valuePattern = Pattern.compile("\\: [0-9]+K->[0-9]+K\\([0-9]+K\\)");
         Pattern gcTypes = getTypesPattern();
 
         Matcher valueMatcher = valuePattern.matcher(gcLogLine);

@@ -39,12 +39,18 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
 
                     int freedSpaceInK = beforeUsedSpaceInK - youngGenCollector.getMemoryAfter().getUsedSpaceInK();
                     rawData.add(new MemoryInfo(
-                            afterTimestamp,
-                            beforeUsedSpaceInK,
+                            beforeTs,
+                            youngGenCollector.getMemoryBefore().getUsedSpaceInK(),
                             youngGenCollector.getMemoryBefore().getAvailableSpaceInK(),
                             incoming,
                             freedSpaceInK));
 
+                    rawData.add(new MemoryInfo(
+                            afterTimestamp,
+                            youngGenCollector.getMemoryAfter().getUsedSpaceInK(),
+                            youngGenCollector.getMemoryAfter().getAvailableSpaceInK(),
+                            incoming,
+                            freedSpaceInK));
                     lastGcTimeStamp = afterTimestamp;
                     lastUseSpaceAfterGcInK = youngGenCollector.getMemoryAfter().getUsedSpaceInK();
                 }
@@ -57,7 +63,7 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
     private static double calcIncoming(long lastGcTimeStamp, int lastUseSpaceAfterGcInK, long beforeTs, int beforeUsedSpaceInK) {
         double incoming = (beforeUsedSpaceInK - lastUseSpaceAfterGcInK) / ((beforeTs - lastGcTimeStamp) / 1000.0);
         if (incoming < 0){
-            System.out.printf("incoming smaller than 0 ... impossible");
+            System.out.println("incoming smaller than 0 ... impossible");
         }
         return incoming;
     }
@@ -81,9 +87,16 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
                     double incoming = calcIncoming(lastGcTimeStamp, lastUseSpaceAfterGcInK, beforeTs, beforeUsedSpaceInK);
                     int freedSpaceInK = beforeUsedSpaceInK - youngGenCollector.getMemoryAfter().getUsedSpaceInK();
                     rawData.add(new MemoryInfo(
-                            afterTimestamp,
-                            beforeUsedSpaceInK,
+                            beforeTs,
+                            youngGenCollector.getMemoryBefore().getUsedSpaceInK(),
                             youngGenCollector.getMemoryBefore().getAvailableSpaceInK(),
+                            incoming,
+                            freedSpaceInK));
+
+                    rawData.add(new MemoryInfo(
+                            afterTimestamp,
+                            youngGenCollector.getMemoryAfter().getUsedSpaceInK(),
+                            youngGenCollector.getMemoryAfter().getAvailableSpaceInK(),
                             incoming,
                             freedSpaceInK));
 
@@ -113,9 +126,16 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
                     double incoming = calcIncoming(lastGcTimeStamp, lastUseSpaceAfterGcInK, beforeTs, beforeUsedSpaceInK);
                     int freedSpaceInK = beforeUsedSpaceInK - youngGenCollector.getMemoryAfter().getUsedSpaceInK();
                     rawData.add(new MemoryInfo(
-                            afterTimestamp,
-                            beforeUsedSpaceInK,
+                            beforeTs,
+                            youngGenCollector.getMemoryBefore().getUsedSpaceInK(),
                             youngGenCollector.getMemoryBefore().getAvailableSpaceInK(),
+                            incoming,
+                            freedSpaceInK));
+
+                    rawData.add(new MemoryInfo(
+                            afterTimestamp,
+                            youngGenCollector.getMemoryAfter().getUsedSpaceInK(),
+                            youngGenCollector.getMemoryAfter().getAvailableSpaceInK(),
                             incoming,
                             freedSpaceInK));
 
@@ -128,8 +148,45 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
         return createMemoryInfoDataSet(rawData);
     }
 
+    public static MemoryInfoDataSet createTotalGenMemoryDataSets(List<GcLoggedEvent> allEvents) {
+        List<MemoryInfo> rawData = new ArrayList<MemoryInfo>();
+        long lastGcTimeStamp = 0;
+        int lastUseSpaceAfterGcInK = 0;
+
+        for (GcLoggedEvent currEvent : allEvents) {
+            if (currEvent instanceof CollectionEvent) {
+                CollectionEvent currCollectionEvent = (CollectionEvent) currEvent;
+                CollectorEvent youngGenCollector = currCollectionEvent.getTotalCollectionValues();
+                if (youngGenCollector != null) {
+                    long afterTimestamp = currCollectionEvent.getTimestamp();
+                    long beforeTs = afterTimestamp - (long) (currCollectionEvent.getGcTiming().getRealTimInSec() * 1000);
+                    int beforeUsedSpaceInK = youngGenCollector.getMemoryBefore().getUsedSpaceInK();
+
+                    double incoming = calcIncoming(lastGcTimeStamp, lastUseSpaceAfterGcInK, beforeTs, beforeUsedSpaceInK);
+                    int freedSpaceInK = beforeUsedSpaceInK - youngGenCollector.getMemoryAfter().getUsedSpaceInK();
+                    rawData.add(new MemoryInfo(
+                            beforeTs,
+                            youngGenCollector.getMemoryBefore().getUsedSpaceInK(),
+                            youngGenCollector.getMemoryBefore().getAvailableSpaceInK(),
+                            incoming,
+                            freedSpaceInK));
+
+                    rawData.add(new MemoryInfo(
+                            afterTimestamp,
+                            youngGenCollector.getMemoryAfter().getUsedSpaceInK(),
+                            youngGenCollector.getMemoryAfter().getAvailableSpaceInK(),
+                            incoming,
+                            freedSpaceInK));
+                }
+            }
+        }
+
+        return createMemoryInfoDataSet(rawData);
+    }
+
     private static MemoryInfoDataSet createMemoryInfoDataSet(List<MemoryInfo> rawData) {
         MemoryInfoDataSet memoryInfoDataSet = new MemoryInfoDataSet();
+        System.out.println("...creating memory data set " + rawData.size() + " entries");
         for (MemoryInfo currMemoryInfo : rawData) {
             try {
                 memoryInfoDataSet.availableSpaceInK.add(new DataSetEntry(currMemoryInfo.timeStamp, currMemoryInfo.availableSpaceKb));

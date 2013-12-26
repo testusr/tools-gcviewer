@@ -57,7 +57,7 @@ public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
             if (memoryTrafficRenderer == null){
                 memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "maxSpace", false, -1, true);
             }
-            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.red);
+            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.blue);
             seriesId++;
         }
 
