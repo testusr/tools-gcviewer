@@ -38,12 +38,6 @@ public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
         TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
         AbstractXYItemRenderer memoryTrafficRenderer = null;
 
-        if (incomingMem) {
-			memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("incomingDataInK(s)", infoDataSet.incomingDataInK));
-			memoryTrafficRenderer = addDataSeriesToPlot(plot, seriesId, memoryTrafficCollection, "memoryTraffic(kB)", false, -1, true);
-            memoryTrafficRenderer.setSeriesPaint(seriesId, Color.yellow);
-            seriesId++;
-		}
         if (totalMemory) {
             memoryTrafficCollection.addSeries(createBigDecimalTimeSeries("availableSpaceInK", infoDataSet.availableSpaceInK));
             if (memoryTrafficRenderer == null){
@@ -61,6 +55,14 @@ public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
             seriesId++;
         }
 
+
+        if (incomingMem) {
+            TimeSeriesCollection incomingMemCollection = new TimeSeriesCollection();
+            incomingMemCollection.addSeries(createBigDecimalTimeSeries("incomingDataInK(s)", infoDataSet.incomingDataInK));
+            AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 1, incomingMemCollection, "incoming(kB/s)", false, 10000, true);
+            renderer.setSeriesPaint(0, Color.yellow);
+            seriesId++;
+        }
 
 		return chart;
 	}

@@ -177,6 +177,10 @@ public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFa
                             youngGenCollector.getMemoryAfter().getAvailableSpaceInK(),
                             incoming,
                             freedSpaceInK));
+
+                    lastGcTimeStamp = afterTimestamp;
+                    lastUseSpaceAfterGcInK = youngGenCollector.getMemoryAfter().getUsedSpaceInK();
+
                 }
             }
         }
