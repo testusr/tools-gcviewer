@@ -245,6 +245,14 @@ public class VisualGc {
 
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createTotalGenMemoryDataSets(loggedEvents), "AllGen", true, false, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
                     CollectionEventBasedMemoryDSFactory.createOldGenMemoryDataSets(loggedEvents), "OldGen", true, true, true);
             addChart(oldGenChart);
         } catch (Exception e) {
@@ -262,14 +270,6 @@ public class VisualGc {
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
                     CollectionEventBasedMemoryDSFactory.createPermGenMemoryDataSets(loggedEvents), "PermGen", true, true, true);
-            addChart(oldGenChart);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
-                    CollectionEventBasedMemoryDSFactory.createTotalGenMemoryDataSets(loggedEvents), "AllGen", true, false, true);
             addChart(oldGenChart);
         } catch (Exception e) {
             e.printStackTrace();
