@@ -219,6 +219,7 @@ public class VisualGc {
         readLogFile();
         if (allEventsParser.isHasFullGcDetails()){
             createAnddAddGcDetailsCharts(allEventsParser.getLoggedEvents());
+            createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
         } else {
             createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
         }
