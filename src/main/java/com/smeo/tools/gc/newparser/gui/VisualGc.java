@@ -310,13 +310,7 @@ public class VisualGc {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            JFreeChart tenuringDistrChart = tenuringDataSetPlotChartFactory.createUsedVsTotalTenuringDistributionChart(
-                    TenuringDataSetFactory.createDataSet(loggedEvents));
-            addChart(tenuringDistrChart);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         try {
             JFreeChart tenuringAgesChart = tenuringDataSetPlotChartFactory.createTotalAgeDistributionChart(
                     TenuringDataSetFactory.createDataSet(loggedEvents));
