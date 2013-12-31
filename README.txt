@@ -10,3 +10,23 @@ MainClass:
 
 argument:
   <gc filename - full path>
+
+Java VM should have following flags enabled:
+
+ * -Xloggc:../../logs/gc.log
+ * -XX:+PrintGCApplicationStoppedTime
+ * -XX:+PrintGCDetails
+ * -XX:+PrintGCTimeStamps
+ * -XX:+PrintGCDateStamps
+ * -XX:+PrintTenuringDistribution
+ *
+
+ Currently supported charts:
+ - AllGeneration chart / available used space
+ - OldGen chart / available used space
+ - YounGen chart / available used space
+ - PermGen chart / available used space
+ - GcCounts / major minor SystemTriggered
+ - Application Stop Time / percentage on one second
+ - TenuringAge / newTreshold maxAge
+ - Tenuring Space / total[per age] desiredSurvivorSpace
