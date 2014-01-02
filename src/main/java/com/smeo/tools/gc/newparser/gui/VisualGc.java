@@ -284,6 +284,14 @@ public class VisualGc {
             e.printStackTrace();
         }
 
+        try {
+            JFreeChart oldGenChart = GarbaceCollectionCountChartFactory.createGcDurationChart(
+                    GarbageCollectionDataSetFactory.createGcDurationDataSet(loggedEvents));
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
