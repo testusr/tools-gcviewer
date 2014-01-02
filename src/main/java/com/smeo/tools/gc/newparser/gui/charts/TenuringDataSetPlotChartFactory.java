@@ -33,7 +33,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
                 false
         );
         chart.setBackgroundPaint(Color.white);
-        chart.addSubtitle(new TextTitle("different values shown in one timeline"));
+        chart.addSubtitle(new TextTitle("max age plus selected new threshold"));
         XYPlot plot = chart.getXYPlot();
         plot.setOrientation(PlotOrientation.VERTICAL);
         plot.setBackgroundPaint(Color.lightGray);
@@ -63,7 +63,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
                 false
         );
         chart.setBackgroundPaint(Color.white);
-        chart.addSubtitle(new TextTitle("different values shown in one timeline"));
+        chart.addSubtitle(new TextTitle("Totally used survivor space till age <x>"));
         XYPlot plot = chart.getXYPlot();
         plot.setOrientation(PlotOrientation.VERTICAL);
         plot.setBackgroundPaint(Color.lightGray);

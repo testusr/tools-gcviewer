@@ -96,3 +96,4 @@ Interesting numbers:
 Articles:
  http://java.dzone.com/articles/how-tame-java-gc-pauses
  http://sureshsvn.com/jvm.html
+ http://www.cs.kent.ac.uk/projects/gc/gcspy/ ?!

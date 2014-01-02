@@ -293,7 +293,7 @@ public class VisualGc {
             if (loggedEvents.size() > 0) {
                 JFreeChart applicationStopTimeChart = PlotChartFactory.createChart(
                         StopTimeDataSetFactory.createApplicationStopTimeDataSet(loggedEvents, 1000),
-                        "ApplicationStopTime", "ApplicationStopTime(%)", Color.black);
+                        "ApplicationStopTime", "ApplicationStopTime(%)", "Stop time per 1 sec", Color.black);
                 addChart(applicationStopTimeChart);
             }
         } catch (Exception e) {

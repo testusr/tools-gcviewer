@@ -24,7 +24,7 @@ public class GarbaceCollectionCountChartFactory extends PlotChartFactory {
 				false
 				);
 		chart.setBackgroundPaint(Color.white);
-		chart.addSubtitle(new TextTitle("different values shown in one timeline"));
+		chart.addSubtitle(new TextTitle("count of garbage collections"));
 		XYPlot plot = chart.getXYPlot();
 		plot.setOrientation(PlotOrientation.VERTICAL);
 		plot.setBackgroundPaint(Color.lightGray);
