@@ -54,7 +54,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
 
     public static JFreeChart createTotalAgeDistributionChart(TenuringDataSetFactory.TenuringDataSet tenuringDataSet) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Tenuring (available/kB)",
+                "Tenuring (total/kB)",
                 "Time of Day",
                 "Primary Range Axis",
                 null,
@@ -85,4 +85,37 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
         return chart;
     }
 
+    public static JFreeChart createTotalAllocationDemographyChart(TenuringDataSetFactory.AllocationDemography allocationDemography) {
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Allocation Demography",
+                "Time of Day",
+                "Primary Range Axis",
+                null,
+                true,
+                true,
+                false
+        );
+        chart.setBackgroundPaint(Color.white);
+        chart.addSubtitle(new TextTitle("object livetime distribution"));
+        XYPlot plot = chart.getXYPlot();
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
+
+        TimeSeriesCollection tenuringDataCollection = new TimeSeriesCollection();
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("shortLived", allocationDemography.shortLivedObjAllocationRate));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("midAged", allocationDemography.midAgedObjAllocationRate));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("longLived", allocationDemography.longLivedObjAllocationRate));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("totalAllocationRate", allocationDemography.totalAllocationRate));
+
+
+        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "tenuringData", false, -1, true);
+        renderer.setSeriesPaint(0, Color.red);
+        renderer.setSeriesPaint(1, Color.green);
+        renderer.setSeriesPaint(2, Color.blue);
+        renderer.setSeriesPaint(3, Color.orange);
+
+        return chart;
+    }
 }

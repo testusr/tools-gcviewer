@@ -53,11 +53,20 @@ public class AllEventsParser {
             if (currentTimeTracker.extractLoggedTime(loggedLine)) {
                 hasDateTimeStamp = true;
                 String loggedEvents = stringBuilder.toString();
-                addEvent(ApplicationStopTimeEventParser.parseGcRunTimeEvents(loggedEvents));
-                addEvent(ApplicationStopTimeEventParser.parseGcStopTimeEvents(loggedEvents));
-                addEvent(fullMemoryInfoEventParser.parseGcEvent(loggedEvents));
-                addEvent(TenuringEventParser.parseGcEvents(loggedEvents));
-                addEvent(CollectionEventParser.parseGcEvent(loggedEvents));
+                ApplicationTimeEvent[] applicationRunTimeEvents = ApplicationStopTimeEventParser.parseGcRunTimeEvents(loggedEvents);
+                ApplicationStopTimeEvent[] applicationTimeEvents = ApplicationStopTimeEventParser.parseGcStopTimeEvents(loggedEvents);
+                GcFullMemoryInfoEvent gcFullMemoryInfoEvent = fullMemoryInfoEventParser.parseGcEvent(loggedEvents);
+                CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(loggedEvents);
+                TenuringEvent tenuringEvent = TenuringEventParser.parseGcEvents(loggedEvents);
+                if (tenuringEvent != null) {
+                    tenuringEvent.setWrappingGcEvent(collectionEvent);
+                }
+
+                addEvent(gcFullMemoryInfoEvent);
+                addEvent(applicationTimeEvents);
+                addEvent(applicationRunTimeEvents);
+                addEvent(collectionEvent);
+                addEvent(tenuringEvent);
                 stringBuilder = new StringBuilder();
             }
             stringBuilder.append(loggedLine);
@@ -101,7 +110,7 @@ public class AllEventsParser {
                 "\n, hasDateTimeStamp=" + hasDateTimeStamp +
                 "\n, hasGcDetails=" + hasGcDetails +
                 "\n, hasFullGcDetails=" + hasFullGcDetails +
-                "\n, readEvents=" +  loggedEvents.size()+
+                "\n, readEvents=" + loggedEvents.size() +
                 "\n}";
     }
 }

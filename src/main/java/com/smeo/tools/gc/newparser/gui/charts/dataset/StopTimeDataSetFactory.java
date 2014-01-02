@@ -41,7 +41,7 @@ public class StopTimeDataSetFactory {
             }
 
 
-            while (currCoveredTotalIntervalTimeInSec > intervalInSec) {
+            while (currCoveredTotalIntervalTimeInSec >= intervalInSec) {
                 intervalCount++;
                 float stopTimeRatio = currIntevalStopTimeInSec / currCoveredTotalIntervalTimeInSec;
                 float stopTimeRatioInPerc = stopTimeRatio * 100f;

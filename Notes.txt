@@ -93,3 +93,6 @@ Interesting numbers:
 
     Old Gen Buffer: the promotion rate * the maximum Old Gen collection time * (1 + a little bit)
 
+Articles:
+ http://java.dzone.com/articles/how-tame-java-gc-pauses
+ http://sureshsvn.com/jvm.html

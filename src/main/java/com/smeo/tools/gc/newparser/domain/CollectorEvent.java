@@ -5,18 +5,18 @@ package com.smeo.tools.gc.newparser.domain;
  * Created by joachim on 25.12.13.
  */
 public class CollectorEvent {
-    private GarbageCollector collect;
+    private GarbageCollector collector;
     private MemorySpace memoryBefore;
     private MemorySpace memoryAfter;
 
     public CollectorEvent(GarbageCollector collect, MemorySpace memoryBefore, MemorySpace memoryAfter) {
-        this.collect = collect;
+        this.collector = collect;
         this.memoryBefore = memoryBefore;
         this.memoryAfter = memoryAfter;
     }
 
-    public GarbageCollector getCollect() {
-        return collect;
+    public GarbageCollector getCollector() {
+        return collector;
     }
 
     public MemorySpace getMemoryBefore() {

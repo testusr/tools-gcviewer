@@ -52,4 +52,5 @@ public class CollectionEvent  extends GcLoggedEvent {
     public GcTiming getGcTiming() {
         return gcTiming;
     }
+
 }

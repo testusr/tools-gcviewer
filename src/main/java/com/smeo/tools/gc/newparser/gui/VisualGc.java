@@ -318,6 +318,14 @@ public class VisualGc {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            JFreeChart tenuringAgesChart = tenuringDataSetPlotChartFactory.createTotalAllocationDemographyChart(
+                    TenuringDataSetFactory.createDemographyDataSet(loggedEvents));
+            addChart(tenuringAgesChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
