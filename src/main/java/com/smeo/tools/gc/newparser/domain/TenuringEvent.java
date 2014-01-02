@@ -1,5 +1,7 @@
 package com.smeo.tools.gc.newparser.domain;
 
+import com.smeo.tools.gc.domain.GarbageCollectionEvent;
+
 /**
  * Created by joachim on 25.12.13.
  */
@@ -12,12 +14,22 @@ public class TenuringEvent  extends GcLoggedEvent {
     public int[] usedSpace = createEmptyAges();
     public int[] totalSpace = createEmptyAges();
 
+    private CollectionEvent wrappingGcEvent;
+
     public TenuringEvent(int newThreshold, int max, int desiredSurvivorSpace, int[] usedSpace, int[] totalSpace) {
         this.newThreshold = newThreshold;
         this.max = max;
         this.desiredSurvivorSpace = desiredSurvivorSpace;
         this.usedSpace = usedSpace;
         this.totalSpace = totalSpace;
+    }
+
+    public CollectionEvent getWrappingGcEvent() {
+        return wrappingGcEvent;
+    }
+
+    public void setWrappingGcEvent(CollectionEvent wrappingGcEvent) {
+        this.wrappingGcEvent = wrappingGcEvent;
     }
 
     private static int[] createEmptyAges() {
@@ -43,12 +55,15 @@ public class TenuringEvent  extends GcLoggedEvent {
         return sum;
     }
 
-    public Integer getYoungGenPromotion() {
-        return usedSpace[0];
-    }
-
-    public Integer getOldGenPromotion() {
-        return usedSpace[MAX_AGE-1];
+    public int getEdenSize() {
+        int edenSize = -1;
+        if (wrappingGcEvent != null){
+            CollectorEvent youngGenCollector = wrappingGcEvent.getYoungGenCollector();
+            if (youngGenCollector != null){
+                edenSize = (youngGenCollector.getMemoryAfter().getAvailableSpaceInK() * 1024) - (2*desiredSurvivorSpace);
+            }
+        }
+        return edenSize;
     }
 
     @Override
@@ -63,4 +78,15 @@ public class TenuringEvent  extends GcLoggedEvent {
     public int getUsedSpace(int age) {
         return usedSpace[age-1];
     }
+
+    public int getOldestAge() {
+        for (int i=MAX_AGE; i > 0; i--){
+            if (usedSpace[i-1] > 0){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
 }

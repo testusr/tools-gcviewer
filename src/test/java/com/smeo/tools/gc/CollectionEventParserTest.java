@@ -79,9 +79,9 @@ public class CollectionEventParserTest extends TestCase {
             assertNull(collectionEvent.getOldGenCollector());
             assertNull(collectionEvent.getPermGenCollector());
         } else{
-            assertEquals(youngC, collectionEvent.getYoungGenCollector().getCollect());
-            assertEquals(oldC, collectionEvent.getOldGenCollector().getCollect());
-            assertEquals(permC, collectionEvent.getPermGenCollector().getCollect());
+            assertEquals(youngC, collectionEvent.getYoungGenCollector().getCollector());
+            assertEquals(oldC, collectionEvent.getOldGenCollector().getCollector());
+            assertEquals(permC, collectionEvent.getPermGenCollector().getCollector());
         }
     }
 }

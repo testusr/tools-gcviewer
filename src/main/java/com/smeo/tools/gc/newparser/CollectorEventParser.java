@@ -18,7 +18,7 @@ public class CollectorEventParser {
     // [OldGen: 204799K->204799K(204800K)
     private static final String knumbersRegexp = "[0-9]+K->[0-9]+K\\([0-9]+K\\)";
     private static final Pattern valuePattern = Pattern.compile("\\: " + knumbersRegexp);
-    private static final Pattern totalCollectionValuePatter =  Pattern.compile("secs\\] " + knumbersRegexp);
+    private static final Pattern totalCollectionValuePatter =  Pattern.compile("(secs\\]|\\)\\]) " + knumbersRegexp);
 
     public static CollectorEvent parseTotalGcEventValues(String gcLogLine){
         Matcher valueMatcher = totalCollectionValuePatter.matcher(gcLogLine);

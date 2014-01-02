@@ -48,19 +48,19 @@ public class CollectionEventParser {
 
         for (CollectorEvent currCollectorEvent : collectorEvents) {
             if (currCollectorEvent != null) {
-                if (MemorySegment.PermGen == currCollectorEvent.getCollect().getMemorySegment()) {
+                if (MemorySegment.PermGen == currCollectorEvent.getCollector().getMemorySegment()) {
                     if (permGenCollector != null) {
                         throw new IllegalArgumentException("two 'PermGen' collectors detected in one gc event");
                     }
                     permGenCollector = currCollectorEvent;
                 }
-                if (MemorySegment.YoungGen == currCollectorEvent.getCollect().getMemorySegment()) {
+                if (MemorySegment.YoungGen == currCollectorEvent.getCollector().getMemorySegment()) {
                     if (youngGenCollector != null) {
                         throw new IllegalArgumentException("two 'YoungGen' collectors detected in one gc event");
                     }
                     youngGenCollector = currCollectorEvent;
                 }
-                if (MemorySegment.OldGen == currCollectorEvent.getCollect().getMemorySegment()) {
+                if (MemorySegment.OldGen == currCollectorEvent.getCollector().getMemorySegment()) {
                     if (oldGenCollector != null) {
                         throw new IllegalArgumentException("two 'OldGen' collectors detected in one gc event");
                     }

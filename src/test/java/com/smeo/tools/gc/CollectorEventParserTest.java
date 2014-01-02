@@ -62,7 +62,7 @@ public class CollectorEventParserTest extends TestCase {
     }
 
     private void verifyCollection(CollectorEvent collectorEvent, GarbageCollector expectedCollector, int before, int after, int available) {
-        assertEquals(collectorEvent.getCollect(), expectedCollector);
+        assertEquals(collectorEvent.getCollector(), expectedCollector);
         assertEquals(collectorEvent.getMemoryBefore().getUsedSpaceInK(), before);
         assertEquals(collectorEvent.getMemoryBefore().getAvailableSpaceInK(), available);
 

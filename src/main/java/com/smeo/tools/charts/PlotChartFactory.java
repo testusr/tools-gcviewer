@@ -23,31 +23,34 @@ import com.smeo.tools.common.DataSetEntry;
 
 public class PlotChartFactory {
 
-	public static JFreeChart createChart(List<DataSetEntry> dataSetEnryList, String chartName, String lineName, Color color) {
-		JFreeChart chart = ChartFactory.createTimeSeriesChart(
-				chartName,
-				"Time of Day",
-				"Primary Range Axis",
-				null,
-				true,
-				true,
-				false
-				);
-		chart.setBackgroundPaint(Color.white);
-		chart.addSubtitle(new TextTitle("different values shown in one timeline"));
-		XYPlot plot = chart.getXYPlot();
-		plot.setOrientation(PlotOrientation.VERTICAL);
-		plot.setBackgroundPaint(Color.lightGray);
-		plot.setDomainGridlinePaint(Color.white);
-		plot.setRangeGridlinePaint(Color.white);
+    public static JFreeChart createChart(List<DataSetEntry> dataSetEnryList, String chartName, String lineName, String textTitle, Color color){
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                chartName,
+                "Time of Day",
+                "Primary Range Axis",
+                null,
+                true,
+                true,
+                false
+        );
+        chart.setBackgroundPaint(Color.white);
+        chart.addSubtitle(new TextTitle(textTitle));
+        XYPlot plot = chart.getXYPlot();
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
 
-		TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
-		memoryTrafficCollection.addSeries(createBigDecimalTimeSeries(lineName, dataSetEnryList));
+        TimeSeriesCollection memoryTrafficCollection = new TimeSeriesCollection();
+        memoryTrafficCollection.addSeries(createBigDecimalTimeSeries(lineName, dataSetEnryList));
 
-		AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, memoryTrafficCollection, chartName, false, -1, true);
-		renderer.setSeriesPaint(0, Color.red);
+        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, memoryTrafficCollection, chartName, false, -1, true);
+        renderer.setSeriesPaint(0, Color.red);
 
-		return chart;
+        return chart;
+    }
+    public static JFreeChart createChart(List<DataSetEntry> dataSetEnryList, String chartName, String lineName, Color color) {
+        return createChart(dataSetEnryList, chartName, lineName, "", color);
 	}
 
 	protected static TimeSeries createBigDecimalTimeSeries(String name, List<DataSetEntry> dataSetEntries) {

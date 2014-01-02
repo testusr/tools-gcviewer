@@ -39,6 +39,29 @@ public class GarbageCollectionDataSetFactory {
         return resultGarbageCollectionDataSet;
     }
 
+    public static GcDurationDataSet createGcDurationDataSet(List<GcLoggedEvent> allGarbageCollectionEvents){
+        GcDurationDataSet gcDurationDataSet = new GcDurationDataSet();
+        for (GcLoggedEvent currEvent : allGarbageCollectionEvents) {
+            if (currEvent instanceof CollectionEvent) {
+                CollectionEvent currCollectionEvent = (CollectionEvent) currEvent;
+                DataSetEntry currEventDataSet = new DataSetEntry(currCollectionEvent.getTimestamp(), currCollectionEvent.getGcTiming().getRealTimInSec());
+
+                if (currCollectionEvent.isMinorCollection()){
+                    gcDurationDataSet.minorGc.add(currEventDataSet);
+                } else {
+                    gcDurationDataSet.majorGc.add(currEventDataSet);
+                }
+
+            }
+        }
+        return gcDurationDataSet;
+    }
+
+    public static class GcDurationDataSet {
+        public List<DataSetEntry> majorGc = new ArrayList<DataSetEntry>();
+        public List<DataSetEntry> minorGc = new ArrayList<DataSetEntry>();
+    }
+
     public static class GarbageCollectionDataSet {
         public List<DataSetEntry> majorGc = new ArrayList<DataSetEntry>();
         public List<DataSetEntry> minorGc = new ArrayList<DataSetEntry>();

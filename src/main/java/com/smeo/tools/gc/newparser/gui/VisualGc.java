@@ -221,6 +221,7 @@ public class VisualGc {
         if (allEventsParser.isHasFullGcDetails()){
             createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
             createAnddAddGcDetailsCharts(allEventsParser.getLoggedEvents());
+            createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
         } else {
             createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
         }
@@ -247,6 +248,14 @@ public class VisualGc {
 
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createTotalGenMemoryDataSets(loggedEvents), "AllGen", true, false, true);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
                     CollectionEventBasedMemoryDSFactory.createOldGenMemoryDataSets(loggedEvents), "OldGen", true, true, true);
             addChart(oldGenChart);
         } catch (Exception e) {
@@ -270,16 +279,16 @@ public class VisualGc {
         }
 
         try {
-            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
-                    CollectionEventBasedMemoryDSFactory.createTotalGenMemoryDataSets(loggedEvents), "AllGen", true, false, true);
+            JFreeChart oldGenChart = GarbaceCollectionCountChartFactory.createChart(
+                    GarbageCollectionDataSetFactory.createGarbageCollectionDataSets(loggedEvents));
             addChart(oldGenChart);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            JFreeChart oldGenChart = GarbaceCollectionCountChartFactory.createChart(
-                    GarbageCollectionDataSetFactory.createGarbageCollectionDataSets(loggedEvents));
+            JFreeChart oldGenChart = GarbaceCollectionCountChartFactory.createGcDurationChart(
+                    GarbageCollectionDataSetFactory.createGcDurationDataSet(loggedEvents));
             addChart(oldGenChart);
         } catch (Exception e) {
             e.printStackTrace();
@@ -294,7 +303,7 @@ public class VisualGc {
             if (loggedEvents.size() > 0) {
                 JFreeChart applicationStopTimeChart = PlotChartFactory.createChart(
                         StopTimeDataSetFactory.createApplicationStopTimeDataSet(loggedEvents, 1000),
-                        "ApplicationStopTime", "ApplicationStopTime(%)", Color.black);
+                        "ApplicationStopTime", "ApplicationStopTime(%)", "Stop time per 1 sec", Color.black);
                 addChart(applicationStopTimeChart);
             }
         } catch (Exception e) {
@@ -311,16 +320,26 @@ public class VisualGc {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            JFreeChart tenuringDistrChart = tenuringDataSetPlotChartFactory.createUsedVsTotalTenuringDistributionChart(
-                    TenuringDataSetFactory.createDataSet(loggedEvents));
-            addChart(tenuringDistrChart);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         try {
             JFreeChart tenuringAgesChart = tenuringDataSetPlotChartFactory.createTotalAgeDistributionChart(
                     TenuringDataSetFactory.createDataSet(loggedEvents));
+            addChart(tenuringAgesChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart memoryDimesionChart = tenuringDataSetPlotChartFactory.createMemoryDimensionChart(
+                    TenuringDataSetFactory.createMemoryDimensionDataSet(loggedEvents));
+            addChart(memoryDimesionChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JFreeChart tenuringAgesChart = tenuringDataSetPlotChartFactory.createTotalAllocationDemographyChart(
+                    TenuringDataSetFactory.createDemographyDataSet(loggedEvents));
             addChart(tenuringAgesChart);
         } catch (Exception e) {
             e.printStackTrace();
