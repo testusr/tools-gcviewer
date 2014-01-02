@@ -3,6 +3,7 @@ package com.smeo.tools.gc.newparser.gui.charts.dataset;
 import com.smeo.tools.common.DataSetEntry;
 import com.smeo.tools.gc.domain.Tenuring;
 import com.smeo.tools.gc.newparser.domain.CollectionEvent;
+import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;
 import com.smeo.tools.gc.newparser.domain.TenuringEvent;
 
@@ -40,6 +41,25 @@ public class TenuringDataSetFactory {
             }
         }
         return survivorInputOutput;
+    }
+
+    public static MemoryDimensioning createMemoryDimensionDataSet(List<GcLoggedEvent> allGarbageCollectionEvents) {
+        MemoryDimensioning memoryDimensioning = new MemoryDimensioning();
+
+        for (GcLoggedEvent currEvent : allGarbageCollectionEvents) {
+            if (currEvent instanceof TenuringEvent) {
+                TenuringEvent currTenuringEvent = (TenuringEvent) currEvent;
+                memoryDimensioning.edenSize.add(new DataSetEntry(currEvent.getTimestamp(), (currTenuringEvent.getEdenSize() / 1024)));
+                memoryDimensioning.survivorSize.add(new DataSetEntry(currEvent.getTimestamp(), (currTenuringEvent.desiredSurvivorSpace / 1024)));
+            } else if (currEvent instanceof CollectionEvent){
+                CollectionEvent collectionEvent = (CollectionEvent) currEvent;
+                CollectorEvent oldGenCollector = collectionEvent.getOldGenCollector();
+                if (oldGenCollector != null){
+                    memoryDimensioning.oldGen.add(new DataSetEntry(currEvent.getTimestamp(), oldGenCollector.getMemoryAfter().getAvailableSpaceInK()));
+                }
+            }
+        }
+        return memoryDimensioning;
     }
 
     public static TenuringDataSetFactory.AllocationDemography createDemographyDataSet(List<GcLoggedEvent> allGarbageCollectionEvents) {
@@ -127,6 +147,11 @@ public class TenuringDataSetFactory {
         return -1;
     }
 
+    public static class MemoryDimensioning {
+        public List<DataSetEntry> survivorSize = new ArrayList<DataSetEntry>();
+        public List<DataSetEntry> edenSize = new ArrayList<DataSetEntry>();
+        public List<DataSetEntry> oldGen = new ArrayList<DataSetEntry>();
+    }
 
     public static class AllocationDemography {
         // http://java.dzone.com/articles/how-tame-java-gc-pauses

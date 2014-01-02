@@ -328,6 +328,14 @@ public class VisualGc {
         }
 
         try {
+            JFreeChart memoryDimesionChart = tenuringDataSetPlotChartFactory.createMemoryDimensionChart(
+                    TenuringDataSetFactory.createMemoryDimensionDataSet(loggedEvents));
+            addChart(memoryDimesionChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             JFreeChart tenuringAgesChart = tenuringDataSetPlotChartFactory.createTotalAllocationDemographyChart(
                     TenuringDataSetFactory.createDemographyDataSet(loggedEvents));
             addChart(tenuringAgesChart);

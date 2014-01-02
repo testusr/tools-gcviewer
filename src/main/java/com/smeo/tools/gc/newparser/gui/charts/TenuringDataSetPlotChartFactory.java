@@ -118,4 +118,36 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
 
         return chart;
     }
+
+    public static JFreeChart createMemoryDimensionChart(TenuringDataSetFactory.MemoryDimensioning memoryDimensioning) {
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Memory Dimension",
+                "Time of Day",
+                "Primary Range Axis",
+                null,
+                true,
+                true,
+                false
+        );
+        chart.setBackgroundPaint(Color.white);
+        chart.addSubtitle(new TextTitle("size of different spaces"));
+        XYPlot plot = chart.getXYPlot();
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
+
+        TimeSeriesCollection tenuringDataCollection = new TimeSeriesCollection();
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("oldGen", memoryDimensioning.oldGen));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("survivor", memoryDimensioning.survivorSize));
+        tenuringDataCollection.addSeries(createBigDecimalTimeSeries("edenSize", memoryDimensioning.edenSize));
+
+
+        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, tenuringDataCollection, "space(K)", false, -1, true);
+        renderer.setSeriesPaint(0, Color.red);
+        renderer.setSeriesPaint(1, Color.green);
+        renderer.setSeriesPaint(2, Color.blue);
+
+        return chart;
+    }
 }
