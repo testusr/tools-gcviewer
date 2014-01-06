@@ -1,8 +1,7 @@
 package com.smeo.tools.gc;
 
-import com.smeo.tools.gc.newparser.ApplicationStopTimeEventParser;
-import com.smeo.tools.gc.newparser.domain.ApplicationStopTimeEvent;
-import com.smeo.tools.gc.newparser.domain.ApplicationTimeEvent;
+import com.smeo.tools.gc.domain.ApplicationStopTimeEvent;
+import com.smeo.tools.gc.domain.ApplicationTimeEvent;
 import junit.framework.TestCase;
 
 /**

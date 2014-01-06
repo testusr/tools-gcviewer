@@ -1,6 +1,5 @@
 package com.smeo.tools.gc;
 
-import com.smeo.tools.gc.newparser.GcFullMemoryInfoEventParser;
 import junit.framework.TestCase;
 
 /**
