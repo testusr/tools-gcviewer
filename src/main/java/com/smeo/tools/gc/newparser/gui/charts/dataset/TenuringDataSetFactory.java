@@ -1,7 +1,6 @@
 package com.smeo.tools.gc.newparser.gui.charts.dataset;
 
 import com.smeo.tools.common.DataSetEntry;
-import com.smeo.tools.gc.domain.Tenuring;
 import com.smeo.tools.gc.newparser.domain.CollectionEvent;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;
@@ -33,7 +32,7 @@ public class TenuringDataSetFactory {
                     survivorInputOutput.sumTotal.add(new DataSetEntry(currEventTime, currTenuring.getSumOfTotals() / 1024));
                     survivorInputOutput.sumUsed.add(new DataSetEntry(currEventTime, currTenuring.getSumOfUsed() / 1024));
 
-                    for (int i = 0; i < Tenuring.MAX_AGE; i++) {
+                    for (int i = 0; i < TenuringEvent.MAX_AGE; i++) {
                         int currTotalSpace = currTenuring.totalSpace[i] / 1024;
                         survivorInputOutput.agesTotal[i].add(new DataSetEntry(currEventTime, currTotalSpace));
                     }

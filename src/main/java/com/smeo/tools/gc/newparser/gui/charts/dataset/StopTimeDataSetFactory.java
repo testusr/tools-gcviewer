@@ -1,8 +1,6 @@
 package com.smeo.tools.gc.newparser.gui.charts.dataset;
 
 import com.smeo.tools.common.DataSetEntry;
-import com.smeo.tools.gc.domain.ApplicationStopTimeEvent;
-import com.smeo.tools.gc.domain.GarbageCollectionEvent;
 import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;
 
 import java.util.ArrayList;

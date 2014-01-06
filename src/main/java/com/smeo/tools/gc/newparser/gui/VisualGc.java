@@ -4,15 +4,12 @@ import com.smeo.tools.charts.ChartUtility;
 import com.smeo.tools.charts.MovingDomainMarker;
 import com.smeo.tools.charts.PlotChartFactory;
 
-import com.smeo.tools.gc.domain.GarbageCollectionEvent;
-
 import com.smeo.tools.gc.newparser.AllEventsParser;
 import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;
 import com.smeo.tools.gc.newparser.gui.charts.GarbaceCollectionCountChartFactory;
 import com.smeo.tools.gc.newparser.gui.charts.MemoryInfoDataSetPlotChartFactory;
 import com.smeo.tools.gc.newparser.gui.charts.TenuringDataSetPlotChartFactory;
 import com.smeo.tools.gc.newparser.gui.charts.dataset.*;
-import com.smeo.tools.gc.parser.GcLogParser;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -32,9 +29,6 @@ public class VisualGc {
 
 
     MovingDomainMarker movingDomainMarker;
-    GcLogParser gcLogParser;
-    MemoryDataSetFactory dataSetFactory = new MemoryDataSetFactory();
-    SurvivorInputOutputDataSetFactory survivorInputOutputDataSetFactory = new SurvivorInputOutputDataSetFactory();
     TenuringDataSetPlotChartFactory tenuringDataSetPlotChartFactory = new TenuringDataSetPlotChartFactory();
 
     List<JFreeChart> charts = new ArrayList<JFreeChart>();
@@ -211,19 +205,14 @@ public class VisualGc {
 
     }
 
-    private void parseLine(String line) {
-        gcLogParser.parseLine(line);
-    }
+
 
     public void start(){
         readLogFile();
+        createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
 
         if (allEventsParser.isHasFullGcDetails()){
-            createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
             createAnddAddGcDetailsCharts(allEventsParser.getLoggedEvents());
-            createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
-        } else {
-            createAndAddRegularCollectionCharts(allEventsParser.getLoggedEvents());
         }
         if (allEventsParser.isHasApplicationStopTime()){
             createAndAddApplicationStopTimeChart(allEventsParser.getLoggedEvents());

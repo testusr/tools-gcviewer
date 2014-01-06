@@ -1,8 +1,5 @@
 package com.smeo.tools.gc.newparser.domain;
 
-import com.smeo.tools.gc.domain.*;
-import com.smeo.tools.gc.domain.GcTiming;
-
 /**
  * Created by joachim on 25.12.13.
  */

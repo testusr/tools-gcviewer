@@ -1,8 +1,6 @@
 package com.smeo.tools.gc.newparser.gui.charts.dataset;
 
 import com.smeo.tools.common.DataSetEntry;
-import com.smeo.tools.gc.domain.GarbageCollectionEvent;
-import com.smeo.tools.gc.domain.HeapMemorySpace;
 import com.smeo.tools.gc.newparser.domain.CollectionEvent;
 import com.smeo.tools.gc.newparser.domain.CollectorEvent;
 import com.smeo.tools.gc.newparser.domain.GcLoggedEvent;

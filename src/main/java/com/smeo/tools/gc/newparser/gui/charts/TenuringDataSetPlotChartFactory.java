@@ -2,7 +2,7 @@ package com.smeo.tools.gc.newparser.gui.charts;
 
 import com.smeo.tools.charts.PlotChartFactory;
 
-import com.smeo.tools.gc.domain.Tenuring;
+import com.smeo.tools.gc.newparser.domain.TenuringEvent;
 import com.smeo.tools.gc.newparser.gui.charts.dataset.TenuringDataSetFactory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -71,7 +71,7 @@ public class TenuringDataSetPlotChartFactory extends PlotChartFactory {
         plot.setRangeGridlinePaint(Color.white);
 
         TimeSeriesCollection tenuringDataCollection = new TimeSeriesCollection();
-        for (int i=0; i < Tenuring.MAX_AGE; i++){
+        for (int i=0; i < TenuringEvent.MAX_AGE; i++){
             tenuringDataCollection.addSeries(createBigDecimalTimeSeries("totalSize-Age"+i, tenuringDataSet.agesTotal[i]));
         }
 
