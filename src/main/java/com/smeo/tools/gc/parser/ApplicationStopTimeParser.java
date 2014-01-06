@@ -1,4 +1,4 @@
-package com.smeo.tools.gc;
+package com.smeo.tools.gc.parser;
 
 import java.io.IOException;
 import java.text.ParseException;

@@ -1,6 +1,7 @@
 package com.smeo.tools.gc;
 
 import com.smeo.tools.gc.domain.TenuringEvent;
+import com.smeo.tools.gc.parser.TenuringEventParser;
 import junit.framework.TestCase;
 
 /**

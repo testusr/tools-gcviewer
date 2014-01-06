@@ -1,4 +1,4 @@
-package com.smeo.tools.gc;
+package com.smeo.tools.gc.parser;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

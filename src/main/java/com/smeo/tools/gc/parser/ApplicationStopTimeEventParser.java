@@ -1,4 +1,4 @@
-package com.smeo.tools.gc;
+package com.smeo.tools.gc.parser;
 
 
 import com.smeo.tools.gc.domain.ApplicationStopTimeEvent;

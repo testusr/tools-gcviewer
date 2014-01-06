@@ -2,6 +2,7 @@ package com.smeo.tools.gc;
 
 import com.smeo.tools.gc.domain.GarbageCollector;
 import com.smeo.tools.gc.domain.CollectorEvent;
+import com.smeo.tools.gc.parser.CollectorEventParser;
 import junit.framework.TestCase;
 
 /**

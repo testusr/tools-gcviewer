@@ -6,7 +6,7 @@ marking the same point in time in all charts with double click markers.
 Help to understand and investigate gc related performance problems.
 
 MainClass:
-  com.smeo.tools.gc.gui.VisualGc
+  com.smeo.tools.gc.VisualGc
 
 argument:
   <gc filename - full path>

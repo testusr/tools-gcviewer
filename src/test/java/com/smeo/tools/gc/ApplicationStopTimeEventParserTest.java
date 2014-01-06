@@ -2,6 +2,7 @@ package com.smeo.tools.gc;
 
 import com.smeo.tools.gc.domain.ApplicationStopTimeEvent;
 import com.smeo.tools.gc.domain.ApplicationTimeEvent;
+import com.smeo.tools.gc.parser.ApplicationStopTimeEventParser;
 import junit.framework.TestCase;
 
 /**

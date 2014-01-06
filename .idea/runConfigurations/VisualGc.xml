@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="VisualGc" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.smeo.tools.gc.gui.VisualGc" />
+    <option name="MAIN_CLASS_NAME" value="com.smeo.tools.gc.VisualGc" />
     <option name="VM_PARAMETERS" value="" />
     <option name="PROGRAM_PARAMETERS" value="/tmp/gc.log" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />

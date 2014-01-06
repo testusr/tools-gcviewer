@@ -1,10 +1,10 @@
-package com.smeo.tools.gc.gui;
+package com.smeo.tools.gc;
 
 import com.smeo.tools.charts.ChartUtility;
 import com.smeo.tools.charts.MovingDomainMarker;
 import com.smeo.tools.charts.PlotChartFactory;
 
-import com.smeo.tools.gc.AllEventsParser;
+import com.smeo.tools.gc.parser.AllEventsParser;
 import com.smeo.tools.gc.domain.GcLoggedEvent;
 import com.smeo.tools.gc.gui.charts.GarbaceCollectionCountChartFactory;
 import com.smeo.tools.gc.gui.charts.MemoryInfoDataSetPlotChartFactory;
