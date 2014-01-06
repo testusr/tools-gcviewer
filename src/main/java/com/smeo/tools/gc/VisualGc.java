@@ -33,7 +33,6 @@ public class VisualGc {
 
     List<JFreeChart> charts = new ArrayList<JFreeChart>();
     String filename;
-    long intervalInMs = 1000;
 
     public VisualGc(String filename){
         super();

@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 5:01 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CollectionEventBasedMemoryDSFactory extends AbstractMemoryDataSetFactory {
+public class CollectionEventBasedMemoryDSFactory  {
 
 
     public static MemoryInfoDataSet createYoungGenMemoryDataSets(List<GcLoggedEvent> allEvents) {

@@ -1,7 +1,6 @@
 package com.smeo.tools.gc.gui.charts;
 
 import com.smeo.tools.charts.PlotChartFactory;
-import com.smeo.tools.gc.gui.charts.dataset.AbstractMemoryDataSetFactory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
