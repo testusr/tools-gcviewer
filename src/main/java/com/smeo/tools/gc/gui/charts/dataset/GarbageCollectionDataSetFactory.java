@@ -2,6 +2,7 @@ package com.smeo.tools.gc.gui.charts.dataset;
 
 import com.smeo.tools.common.DataSetEntry;
 import com.smeo.tools.gc.domain.CollectionEvent;
+import com.smeo.tools.gc.domain.CollectorEvent;
 import com.smeo.tools.gc.domain.GcLoggedEvent;
 
 import java.util.ArrayList;
@@ -44,12 +45,41 @@ public class GarbageCollectionDataSetFactory {
         for (GcLoggedEvent currEvent : allGarbageCollectionEvents) {
             if (currEvent instanceof CollectionEvent) {
                 CollectionEvent currCollectionEvent = (CollectionEvent) currEvent;
-                DataSetEntry currEventDataSet = new DataSetEntry(currCollectionEvent.getTimestamp(), currCollectionEvent.getGcTiming().getRealTimInSec());
+                DataSetEntry currEventDataSet = null;
+
+                CollectorEvent oldGenCollector = currCollectionEvent.getOldGenCollector();
+                CollectorEvent youngGenCollector  = currCollectionEvent.getYoungGenCollector();
 
                 if (currCollectionEvent.isMinorCollection()){
-                    gcDurationDataSet.minorGc.add(currEventDataSet);
+                    if (oldGenCollector != null){
+                        if (youngGenCollector.getTimeUsedInSecs() != null){
+                            gcDurationDataSet.minorGc.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                    youngGenCollector.getTimeUsedInSecs()));
+                        }
+                        // this collection was triggered by a minor collection
+                        if (oldGenCollector.getTimeUsedInSecs() != null){
+                            gcDurationDataSet.majorGcTriggeredByMinor.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                    oldGenCollector.getTimeUsedInSecs()));
+                        }
+                    } else {
+                        if (youngGenCollector.getTimeUsedInSecs() != null){
+                            // more accurate and preferable
+                            gcDurationDataSet.minorGc.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                    youngGenCollector.getTimeUsedInSecs()));
+                        } else {
+                            gcDurationDataSet.minorGc.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                    currCollectionEvent.getGcTiming().getRealTimInSec()));
+                        }
+
+                    }
                 } else {
-                    gcDurationDataSet.majorGc.add(currEventDataSet);
+                    if (oldGenCollector.getTimeUsedInSecs() != null){
+                        gcDurationDataSet.majorGc.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                oldGenCollector.getTimeUsedInSecs()));
+                    } else {
+                        gcDurationDataSet.majorGc.add(new DataSetEntry(currCollectionEvent.getTimestamp(),
+                                currCollectionEvent.getGcTiming().getRealTimInSec()));
+                    }
                 }
 
             }
@@ -60,6 +90,8 @@ public class GarbageCollectionDataSetFactory {
     public static class GcDurationDataSet {
         public List<DataSetEntry> majorGc = new ArrayList<DataSetEntry>();
         public List<DataSetEntry> minorGc = new ArrayList<DataSetEntry>();
+        public List<DataSetEntry> majorGcTriggeredByMinor = new ArrayList<DataSetEntry>();
+
     }
 
     public static class GarbageCollectionDataSet {

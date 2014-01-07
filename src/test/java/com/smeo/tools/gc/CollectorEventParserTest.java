@@ -37,7 +37,7 @@ public class CollectorEventParserTest extends TestCase {
 
         CollectorEvent[] collectorEvents = CollectorEventParser.parseGcEvents(logFile);
         assertNull(collectorEvents[1]);
-        verifyCollection(collectorEvents[0], GarbageCollector.DefNew, 92160, 10240, 92160);
+        verifyCollection(collectorEvents[0], GarbageCollector.DefNew, 92160, 10240, 92160, 0.0302569);
 
     }
 
@@ -62,11 +62,16 @@ public class CollectorEventParserTest extends TestCase {
     }
 
     private void verifyCollection(CollectorEvent collectorEvent, GarbageCollector expectedCollector, int before, int after, int available) {
+        verifyCollection(collectorEvent, expectedCollector, before, after, available, null);
+    }
+
+    private void verifyCollection(CollectorEvent collectorEvent, GarbageCollector expectedCollector, int before, int after, int available, Double timeInSec) {
         assertEquals(collectorEvent.getCollector(), expectedCollector);
         assertEquals(collectorEvent.getMemoryBefore().getUsedSpaceInK(), before);
         assertEquals(collectorEvent.getMemoryBefore().getAvailableSpaceInK(), available);
 
         assertEquals(collectorEvent.getMemoryAfter().getUsedSpaceInK(), after);
         assertEquals(collectorEvent.getMemoryAfter().getAvailableSpaceInK(), available);
+        assertEquals(collectorEvent.getTimeUsedInSecs(), timeInSec);
     }
 }

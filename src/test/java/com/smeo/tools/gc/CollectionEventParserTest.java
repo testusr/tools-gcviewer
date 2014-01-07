@@ -46,7 +46,8 @@ public class CollectionEventParserTest extends TestCase {
                 ": 92160K->10240K(92160K), 0.0302569 secs] 159852K->85199K(296960K), 0.0303246 secs] [Times: user=0.03 sys=0.00, real=0.03 secs]" };
 
         CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
-        verifyCollection(collectionEvent, true, false, GarbageCollector.DefNew, null, null);
+        verifyTotalCollection(collectionEvent, 159852, 85199, 296960);
+                verifyCollection(collectionEvent, true, false, GarbageCollector.DefNew, null, null);
         validateTiming(collectionEvent, 0.03, 0.00, 0.03);
 
     }
@@ -66,8 +67,12 @@ public class CollectionEventParserTest extends TestCase {
                 "}" };
         CollectionEvent collectionEvent = CollectionEventParser.parseGcEvent(logFile);
         verifyCollection(collectionEvent, false, false, GarbageCollector.PsYoungGen, GarbageCollector.ParOldGen, GarbageCollector.PSPermGen);
-        validateTiming(collectionEvent, 0.03, 0.00, 0.04);
-
+        validateTiming(collectionEvent, 0.03, 0.00, 0.04);  }
+    
+    private void verifyTotalCollection(CollectionEvent collectionEvent, long before, long after, long total){
+        assertTrue(collectionEvent.getTotalCollectionValues().getMemoryBefore().getUsedSpaceInK() == before);
+        assertTrue(collectionEvent.getTotalCollectionValues().getMemoryAfter().getUsedSpaceInK() == after);
+        assertTrue(collectionEvent.getTotalCollectionValues().getMemoryAfter().getAvailableSpaceInK() == total);
     }
 
     private void verifyCollection(CollectionEvent collectionEvent,

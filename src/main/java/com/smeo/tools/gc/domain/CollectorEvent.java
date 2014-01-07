@@ -5,14 +5,16 @@ package com.smeo.tools.gc.domain;
  * Created by joachim on 25.12.13.
  */
 public class CollectorEvent {
+    private final Double timeUsedInSecs;
     private GarbageCollector collector;
     private MemorySpace memoryBefore;
     private MemorySpace memoryAfter;
 
-    public CollectorEvent(GarbageCollector collect, MemorySpace memoryBefore, MemorySpace memoryAfter) {
+    public CollectorEvent(GarbageCollector collect, MemorySpace memoryBefore, MemorySpace memoryAfter, Double timeInSecs) {
         this.collector = collect;
         this.memoryBefore = memoryBefore;
         this.memoryAfter = memoryAfter;
+        this.timeUsedInSecs = timeInSecs;
     }
 
     public GarbageCollector getCollector() {
@@ -26,4 +28,6 @@ public class CollectorEvent {
     public MemorySpace getMemoryAfter() {
         return memoryAfter;
     }
+
+    public Double getTimeUsedInSecs() { return timeUsedInSecs; }
 }
