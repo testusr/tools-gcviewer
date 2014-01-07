@@ -143,8 +143,8 @@ public class CreateGarbage {
 
     public static void main(String[] args) {
         CreateGarbage garbageCreator = new CreateGarbage();
-        garbageCreator.addGarbageCreator(GarbageCreator.createWithTotalBytes(0, 10000, 30000, (1024*1024*10)));
-        garbageCreator.addGarbageCreator(GarbageCreator.createWithBytesPerSecond(5000, 30000, 10, (1024*1024*200)));
+//        garbageCreator.addGarbageCreator(GarbageCreator.createWithTotalBytes(0, 10000, 30000, (1024*1024*10)));
+        garbageCreator.addGarbageCreator(GarbageCreator.createWithBytesPerSecond(5000, 30000, 100, (1024*1024*1024)));
 
         garbageCreator.run();
     }

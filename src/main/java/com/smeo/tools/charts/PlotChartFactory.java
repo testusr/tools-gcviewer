@@ -61,9 +61,15 @@ public class PlotChartFactory {
 		return timeSeries;
 	}
 
+    protected static AbstractXYItemRenderer addDataSeriesToPlot(XYPlot plot, int dataSetIndex, TimeSeriesCollection collection, String name,
+                                                                boolean showSymbol,
+                                                                double maxRange, boolean axisVisible) {
+        return addDataSeriesToPlot(plot, dataSetIndex, collection, name, showSymbol, maxRange, axisVisible, true);
+    }
+
 	protected static AbstractXYItemRenderer addDataSeriesToPlot(XYPlot plot, int dataSetIndex, TimeSeriesCollection collection, String name,
 			boolean showSymbol,
-			double maxRange, boolean axisVisible) {
+			double maxRange, boolean axisVisible, boolean baseLineVisible) {
 
 		NumberAxis axis = new NumberAxis(name);
 		axis.setAutoRangeIncludesZero(false);
@@ -83,11 +89,13 @@ public class PlotChartFactory {
 		plot.mapDatasetToRangeAxis(dataSetIndex, new Integer(dataSetIndex));
 		if (!showSymbol) {
 			StandardXYItemRenderer standardRenderer = new StandardXYItemRenderer();
+            standardRenderer.setPlotLines(baseLineVisible);
 			plot.setRenderer(dataSetIndex, standardRenderer);
 			return standardRenderer;
 		} else {
 			XYLineAndShapeRenderer renderer2006 = new XYLineAndShapeRenderer();
 			renderer2006.setUseFillPaint(true);
+            renderer2006.setBaseLinesVisible(baseLineVisible);
 			renderer2006.setBaseFillPaint(Color.white);
 			plot.setRenderer(dataSetIndex, renderer2006);
 			return renderer2006;

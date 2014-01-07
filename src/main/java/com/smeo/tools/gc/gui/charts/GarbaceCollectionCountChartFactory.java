@@ -34,8 +34,8 @@ public class GarbaceCollectionCountChartFactory extends PlotChartFactory {
         TimeSeriesCollection fullGcTimeSeriesCollection = new TimeSeriesCollection();
         fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("majorGc", gcDurationDataSet.majorGc));
         fullGcTimeSeriesCollection.addSeries(createBigDecimalTimeSeries("minorGc", gcDurationDataSet.minorGc));
-        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, fullGcTimeSeriesCollection, "majorgc duration", true, -1, true);
-        addDataSeriesToPlot(plot, 0, fullGcTimeSeriesCollection, "majorgc duration", true, -1, true);
+        AbstractXYItemRenderer renderer = addDataSeriesToPlot(plot, 0, fullGcTimeSeriesCollection, "majorgc duration", true, -1, true, false);
+        addDataSeriesToPlot(plot, 0, fullGcTimeSeriesCollection, "majorgc duration", true, -1, true, false);
         renderer.setSeriesPaint(0, Color.red);
         renderer.setSeriesPaint(1, Color.black);
 
