@@ -1,6 +1,7 @@
 package com.smeo.tools.gc.gui.charts;
 
 import com.smeo.tools.charts.PlotChartFactory;
+import com.smeo.tools.gc.gui.charts.dataset.MemoryInfoDataSet;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -12,7 +13,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import java.awt.*;
 
 public class MemoryInfoDataSetPlotChartFactory extends PlotChartFactory {
-	public JFreeChart createChart(AbstractMemoryDataSetFactory.MemoryInfoDataSet infoDataSet, String name, boolean usedSpace, boolean incomingMem, boolean totalMemory) {
+	public JFreeChart createChart(MemoryInfoDataSet infoDataSet, String name, boolean usedSpace, boolean incomingMem, boolean totalMemory) {
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(
 				name,
 				"Time of Day",
