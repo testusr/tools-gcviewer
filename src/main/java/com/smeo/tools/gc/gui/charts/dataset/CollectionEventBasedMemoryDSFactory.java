@@ -60,9 +60,6 @@ public class CollectionEventBasedMemoryDSFactory  {
 
     private static double calcIncoming(long lastGcTimeStamp, int lastUseSpaceAfterGcInK, long beforeTs, int beforeUsedSpaceInK) {
         double incoming = (beforeUsedSpaceInK - lastUseSpaceAfterGcInK) / ((beforeTs - lastGcTimeStamp) / 1000.0);
-        if (incoming < 0){
-            System.out.println("incoming smaller than 0 ... impossible");
-        }
         return incoming;
     }
 
