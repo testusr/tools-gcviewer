@@ -14,7 +14,7 @@ public class PatternFactory {
     private static final String minorCollectionPatter = "[GC";
 
     // CollectorEventParser
-    private static final String optionaltimeTaken = "(, [0-9]+\\.[0-9]+ secs){0,1}";
+    private static final String optionaltimeTaken = "(, "+doubleValue+" secs){0,1}";
     private static final String knumbersRegexp = "[0-9]+K->[0-9]+K\\([0-9]+K\\)";
     private static final Pattern valuePattern = Pattern.compile("\\: " + knumbersRegexp + optionaltimeTaken);
     private static final String totalCollection = "(secs\\]|\\)\\]) " + knumbersRegexp + optionaltimeTaken;
@@ -30,13 +30,13 @@ public class PatternFactory {
 
     // GcTimingEventParser
         //[Times: user=0.02 sys=0.00, real=0.03 secs]
-    private static final Pattern gcTimingPattern = Pattern.compile("\\[Times: user=[0-9]+\\.[0-9]+ sys=[0-9]+\\.[0-9]+, real=[0-9]+\\.[0-9]+ secs");
+    private static final Pattern gcTimingPattern = Pattern.compile("\\[Times: user="+doubleValue+" sys="+doubleValue+", real="+doubleValue+" secs");
 
 
     // ApplicationStopTimeEventParser
 
-    private final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +[0-9]+\\.[0-9]+ seconds");
-    private final static Pattern doubleValuePatter = Pattern.compile("[0-9]+\\.[0-9]+");
+    private final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +"+doubleValue+" seconds");
+    private final static Pattern doubleValuePatter = Pattern.compile(""+doubleValue+"");
 
 
     public static Pattern applicationRunTimePattern() {
