@@ -17,9 +17,6 @@ import static com.smeo.tools.gc.parser.PatternFactory.*;
  */
 public class ApplicationStopTimeEventParser {
 
-    final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +[0-9]+\\.[0-9]+ seconds");
-    final static Pattern doubleValuePatter = Pattern.compile("[0-9]+\\.[0-9]+");
-
     public static ApplicationStopTimeEvent[] parseGcStopTimeEvents(String[] gcLogLines) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String currString : gcLogLines){
@@ -46,7 +43,7 @@ public class ApplicationStopTimeEventParser {
     }
 
     public static ApplicationStopTimeEvent[] parseGcStopTimeEvents(String loggedEvent) {
-        Matcher stopTimeMatcher = applicationStopPattern.matcher(loggedEvent);
+        Matcher stopTimeMatcher = PatternFactory.applicationStopPattern().matcher(loggedEvent);
         List<ApplicationStopTimeEvent> stopTimEvents = new ArrayList<ApplicationStopTimeEvent>();
         while (stopTimeMatcher.find()){
             stopTimEvents.add(createStopTimeEvent(stopTimeMatcher.group()));
@@ -55,7 +52,7 @@ public class ApplicationStopTimeEventParser {
     }
 
     private static ApplicationStopTimeEvent createStopTimeEvent(String loggedStopTime) {
-        Matcher valueMatcher = doubleValuePatter.matcher(loggedStopTime);
+        Matcher valueMatcher = PatternFactory.doubleValuePatter().matcher(loggedStopTime);
         if (valueMatcher.find()){
             return new ApplicationStopTimeEvent(toDouble(valueMatcher));
         }
@@ -63,7 +60,7 @@ public class ApplicationStopTimeEventParser {
     }
 
     private static ApplicationTimeEvent createRunTimeEvent(String loggedRunTime){
-        Matcher valueMatcher = doubleValuePatter.matcher(loggedRunTime);
+        Matcher valueMatcher = PatternFactory.doubleValuePatter().matcher(loggedRunTime);
         if (valueMatcher.find()){
             return new ApplicationTimeEvent(toDouble(valueMatcher));
         }

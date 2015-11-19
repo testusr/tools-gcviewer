@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
  * Created by truehl on 11/19/15.
  */
 public class PatternFactory {
-    private final static Pattern applicationRunTimePattern = Pattern.compile("Application time: +[0-9]+\\.[0-9]+ seconds");
+    private final static String doubleValue = "[0-9]+\\.[0-9]+";
+    private final static Pattern applicationRunTimePattern = Pattern.compile("Application time: +"+doubleValue+" seconds");
     private static final String majorCollectionPatter = "[Full GC";
     private static final String majorSystemCollectionPatter = "[Full GC (System)";
     private static final String minorCollectionPatter = "[GC";
@@ -27,9 +28,16 @@ public class PatternFactory {
     private final static Pattern infoEventPattern = Pattern.compile("(" + headerLine + "|" + collectorStartLine + "|" + spaceInfoLine + ")");
     private final static Pattern numberPattern = Pattern.compile("[0-9]+\\.{0,1}[0-9]*");
 
-//    GcTimingEventParser
+    // GcTimingEventParser
         //[Times: user=0.02 sys=0.00, real=0.03 secs]
     private static final Pattern gcTimingPattern = Pattern.compile("\\[Times: user=[0-9]+\\.[0-9]+ sys=[0-9]+\\.[0-9]+, real=[0-9]+\\.[0-9]+ secs");
+
+
+    // ApplicationStopTimeEventParser
+
+    private final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +[0-9]+\\.[0-9]+ seconds");
+    private final static Pattern doubleValuePatter = Pattern.compile("[0-9]+\\.[0-9]+");
+
 
     public static Pattern applicationRunTimePattern() {
         return applicationRunTimePattern;
@@ -69,5 +77,13 @@ public class PatternFactory {
 
     public static Pattern gcTimingPattern() {
         return gcTimingPattern;
+    }
+
+    public static Pattern applicationStopPattern() {
+        return applicationStopPattern;
+    }
+
+    public static Pattern doubleValuePatter() {
+        return doubleValuePatter;
     }
 }
