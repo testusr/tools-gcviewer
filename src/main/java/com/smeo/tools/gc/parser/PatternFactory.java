@@ -7,7 +7,10 @@ import java.util.regex.Pattern;
  * Created by truehl on 11/19/15.
  */
 public class PatternFactory {
-    private final static String doubleValue = "[0-9]+\\.[0-9]+";
+    // 1.7+ this is a ',' below its is a '.'
+    private final static char decimalMarker = '.';
+
+    private final static String doubleValue = "[0-9]+\\"+decimalMarker+"[0-9]+";
     private final static Pattern applicationRunTimePattern = Pattern.compile("Application time: +"+doubleValue+" seconds");
     private static final String majorCollectionPatter = "[Full GC";
     private static final String majorSystemCollectionPatter = "[Full GC (System)";
@@ -44,9 +47,12 @@ public class PatternFactory {
     }
 
     public static double toDouble(Matcher matcher) {
-        return Double.valueOf(matcher.group());
+        return toDouble(matcher.group());
     }
 
+    public static double toDouble(String element) {
+        return Double.valueOf(element.replace(decimalMarker,'.'));
+    }
     public static CharSequence majorCollectionPatter() {
         return majorCollectionPatter;
     }
@@ -86,4 +92,6 @@ public class PatternFactory {
     public static Pattern doubleValuePatter() {
         return doubleValuePatter;
     }
+
+
 }

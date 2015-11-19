@@ -22,10 +22,10 @@ public class GcTimingEventParser {
     public static GcTiming parseGcEvent(String loggedEvent) {
         Matcher matcher = gcTimingPattern().matcher(loggedEvent);
         if (matcher.find()){
-            String[] elements = matcher.group().split(",| |=");
-            return new GcTiming(Double.valueOf(elements[2]),
-                    Double.valueOf(elements[4]),
-                    Double.valueOf(elements[7]));
+            String[] elements = matcher.group().split(", | |=");
+            return new GcTiming(PatternFactory.toDouble(elements[2]),
+                    PatternFactory.toDouble(elements[4]),
+                    PatternFactory.toDouble(elements[6]));
         }
         return null;
     }
