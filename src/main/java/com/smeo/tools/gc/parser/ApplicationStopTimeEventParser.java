@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.smeo.tools.gc.parser.PatternFactory.*;
+
+
 /**
  * Created by joachim on 25.12.13.
  */
 public class ApplicationStopTimeEventParser {
-    final static Pattern applicationRunTimePattern = Pattern.compile("Application time: +[0-9]+\\.[0-9]+ seconds");
+
     final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +[0-9]+\\.[0-9]+ seconds");
     final static Pattern doubleValuePatter = Pattern.compile("[0-9]+\\.[0-9]+");
 
@@ -34,7 +37,7 @@ public class ApplicationStopTimeEventParser {
     }
 
     public static ApplicationTimeEvent[] parseGcRunTimeEvents(String loggedEvent) {
-        Matcher runTimeMatcher = applicationRunTimePattern.matcher(loggedEvent);
+        Matcher runTimeMatcher = applicationRunTimePattern().matcher(loggedEvent);
         List<ApplicationTimeEvent> stopTimEvents = new ArrayList<ApplicationTimeEvent>();
         while (runTimeMatcher.find()){
             stopTimEvents.add(createRunTimeEvent(runTimeMatcher.group()));
@@ -54,7 +57,7 @@ public class ApplicationStopTimeEventParser {
     private static ApplicationStopTimeEvent createStopTimeEvent(String loggedStopTime) {
         Matcher valueMatcher = doubleValuePatter.matcher(loggedStopTime);
         if (valueMatcher.find()){
-            return new ApplicationStopTimeEvent(Double.valueOf(valueMatcher.group()));
+            return new ApplicationStopTimeEvent(toDouble(valueMatcher));
         }
         return null;
     }
@@ -62,7 +65,7 @@ public class ApplicationStopTimeEventParser {
     private static ApplicationTimeEvent createRunTimeEvent(String loggedRunTime){
         Matcher valueMatcher = doubleValuePatter.matcher(loggedRunTime);
         if (valueMatcher.find()){
-            return new ApplicationTimeEvent(Double.valueOf(valueMatcher.group()));
+            return new ApplicationTimeEvent(toDouble(valueMatcher));
         }
         return null;
 

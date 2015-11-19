@@ -5,6 +5,8 @@ import com.smeo.tools.gc.domain.CollectorEvent;
 import com.smeo.tools.gc.domain.GcTiming;
 import com.smeo.tools.gc.domain.MemorySegment;
 
+import static com.smeo.tools.gc.parser.PatternFactory.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: smeo
@@ -13,9 +15,8 @@ import com.smeo.tools.gc.domain.MemorySegment;
  * To change this template use File | Settings | File Templates.
  */
 public class CollectionEventParser {
-    private static final String majorCollectionPatter = "[Full GC";
-    private static final String majorSystemCollectionPatter = "[Full GC (System)";
-    private static final String minorCollectionPatter = "[GC";
+
+
 
     public static CollectionEvent parseGcEvent(String[] gcLogLines) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -26,13 +27,13 @@ public class CollectionEventParser {
     }
 
     public static CollectionEvent parseGcEvent(String loggedEvent) {
-        if (!loggedEvent.contains(majorCollectionPatter)
-                && !loggedEvent.contains(majorSystemCollectionPatter)
-                && !loggedEvent.contains(minorCollectionPatter)) {
+        if (!loggedEvent.contains(majorCollectionPatter())
+                && !loggedEvent.contains(majorSystemCollectionPatter())
+                && !loggedEvent.contains(minorCollectionPatter())) {
             return null;
         }
-        boolean isMinorCollection = !loggedEvent.contains(majorCollectionPatter);
-        boolean isTriggeredBySystem = loggedEvent.contains(majorSystemCollectionPatter);
+        boolean isMinorCollection = !loggedEvent.contains(majorCollectionPatter());
+        boolean isTriggeredBySystem = loggedEvent.contains(majorSystemCollectionPatter());
 
         CollectorEvent totalCollectionValues = CollectorEventParser.parseTotalGcEventValues(loggedEvent);
         GcTiming gcTiming = GcTimingEventParser.parseGcEvent(loggedEvent);

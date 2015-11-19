@@ -7,6 +7,8 @@ import com.smeo.tools.gc.domain.MemorySpace;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.smeo.tools.gc.parser.PatternFactory.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: smeo
@@ -16,14 +18,10 @@ import java.util.regex.Pattern;
  */
 public class CollectorEventParser {
     // [OldGen: 204799K->204799K(204800K)
-    private static final String optionaltimeTaken = "(, [0-9]+\\.[0-9]+ secs){0,1}";
-    private static final String knumbersRegexp = "[0-9]+K->[0-9]+K\\([0-9]+K\\)";
-    private static final Pattern valuePattern = Pattern.compile("\\: " + knumbersRegexp + optionaltimeTaken);
-    private static final String totalCollection = "(secs\\]|\\)\\]) " + knumbersRegexp + optionaltimeTaken;
-    private static final Pattern totalCollectionValuePatter =  Pattern.compile(totalCollection);
+
 
     public static CollectorEvent parseTotalGcEventValues(String gcLogLine){
-        Matcher valueMatcher = totalCollectionValuePatter.matcher(gcLogLine);
+        Matcher valueMatcher = totalCollectionValuePatter().matcher(gcLogLine);
         int i =0;
         while (valueMatcher.find()) {
             String group = valueMatcher.group();
@@ -42,7 +40,7 @@ public class CollectorEventParser {
     public static CollectorEvent[] parseGcEvents(String gcLogLine) {
         Pattern gcTypes = getTypesPattern();
 
-        Matcher valueMatcher = valuePattern.matcher(gcLogLine);
+        Matcher valueMatcher = valuePattern().matcher(gcLogLine);
         Matcher gcTypeMatcher = gcTypes.matcher(gcLogLine);
         CollectorEvent[] collectorEvents = new CollectorEvent[3];
         int i =0;

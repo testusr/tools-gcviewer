@@ -8,16 +8,12 @@ import com.smeo.tools.gc.domain.MemorySpaceInfo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.smeo.tools.gc.parser.PatternFactory.*;
+
 /**
  * Created by joachim on 25.12.13.
  */
 public class GcFullMemoryInfoEventParser {
-    private final static String headerLine = "Heap (before|after) GC invocations=[0-9]+ \\(full [0-9]+";
-    private final static String collectorStartLine = "[A-Za-z]+ +total [0-9]+K, used [0-9]+K";
-    private final static String spaceInfoLine = "(eden|from|to|object) +space [0-9]+K, [0-9]*";
-
-    private final static Pattern infoEventPattern = Pattern.compile("("+headerLine+"|"+collectorStartLine+"|"+spaceInfoLine+")");
-    private final static Pattern numberPattern = Pattern.compile("[0-9]+\\.{0,1}[0-9]*");
 
     private FullMemoryInfo beforeGcMemoryInfo;
     private FullMemoryInfo afterGcMemoryInfo;
@@ -47,7 +43,7 @@ public class GcFullMemoryInfoEventParser {
     }
 
     private FullMemoryInfo parseAfterGcEvent(String loggedEvent) {
-        Matcher infoEventMatcher = infoEventPattern.matcher(loggedEvent);
+        Matcher infoEventMatcher = infoEventPattern().matcher(loggedEvent);
         int i=0;
         if (infoEventMatcher.find()){
             if (infoEventMatcher.group().contains("after")){
@@ -58,7 +54,7 @@ public class GcFullMemoryInfoEventParser {
     }
 
     private FullMemoryInfo parseBeforeGcEvent(String loggedEvent) {
-        Matcher infoEventMatcher = infoEventPattern.matcher(loggedEvent);
+        Matcher infoEventMatcher = infoEventPattern().matcher(loggedEvent);
         if (infoEventMatcher.find()){
             if (infoEventMatcher.group().contains("before")){
                 return createFullMemoryInfo(loggedEvent);
@@ -69,7 +65,7 @@ public class GcFullMemoryInfoEventParser {
 
     private FullMemoryInfo createFullMemoryInfo(String loggedEvent) {
         try {
-        Matcher infoEventMatcher = infoEventPattern.matcher(loggedEvent);
+        Matcher infoEventMatcher = infoEventPattern().matcher(loggedEvent);
         String headline = getNext(infoEventMatcher);
         String youngGenHead = getNext(infoEventMatcher);
         String edenSpace = getNext(infoEventMatcher);
@@ -98,7 +94,7 @@ public class GcFullMemoryInfoEventParser {
 
     private MemorySpaceInfo extractTotalMemorySpace(String youngGenHead) {
         //"PSYoungGen      total 9728K, used 0K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)",
-        Matcher numberMatcher = numberPattern.matcher(youngGenHead);
+        Matcher numberMatcher = numberPattern().matcher(youngGenHead);
         int total;
         int used;
 
@@ -125,7 +121,7 @@ public class GcFullMemoryInfoEventParser {
 
     private MemorySpaceInfo extractMemorySpace(String space) {
         // "eden space 9216K, 0% used [0x00000000ff600000,0x00000000ff600000,0x00000000fff00000)",
-        Matcher numberMatcher = numberPattern.matcher(space);
+        Matcher numberMatcher = numberPattern().matcher(space);
         int total;
         float usedPerc;
 
