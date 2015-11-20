@@ -170,6 +170,15 @@ public class VisualGc {
 
         try {
             JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
+                    CollectionEventBasedMemoryDSFactory.createYoungGenMemoryDataSets(loggedEvents), "YoungGen-incoming", false, true, false);
+            addChart(oldGenChart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            JFreeChart oldGenChart = memoryInfoDataSetPlotChart.createChart(
                     CollectionEventBasedMemoryDSFactory.createPermGenMemoryDataSets(loggedEvents), "PermGen", true, true, true);
             addChart(oldGenChart);
         } catch (Exception e) {

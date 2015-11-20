@@ -17,6 +17,7 @@ public class GcFullMemoryInfoEventParser {
 
     private FullMemoryInfo beforeGcMemoryInfo;
     private FullMemoryInfo afterGcMemoryInfo;
+    private boolean loggedError = false;
 
     public GcFullMemoryInfoEvent parseGcEvent(String[] gcLogLines) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -87,7 +88,10 @@ public class GcFullMemoryInfoEventParser {
                 extractCollector(permGenHead),
                 extractMemorySpace(permGenObjSpace));
         } catch (IllegalArgumentException e){
+            if (!loggedError){
             System.out.println("Could not read perm gen info for FullMemoryInfo ... most likely CMS Version has to be fixed");
+                loggedError = true;
+            }
         }
         return null;
     }

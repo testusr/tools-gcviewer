@@ -54,7 +54,7 @@ public class CollectionEventBasedMemoryDSFactory  {
                 }
             }
         }
-
+        System.out.print("youngGen ");
         return createMemoryInfoDataSet(rawData);
     }
 
@@ -101,6 +101,7 @@ public class CollectionEventBasedMemoryDSFactory  {
             }
         }
 
+        System.out.print("oldGen ");
         return createMemoryInfoDataSet(rawData);
     }
 
@@ -139,7 +140,7 @@ public class CollectionEventBasedMemoryDSFactory  {
                 }
             }
         }
-
+        System.out.print("permGen ");
         return createMemoryInfoDataSet(rawData);
     }
 
@@ -179,7 +180,7 @@ public class CollectionEventBasedMemoryDSFactory  {
                 }
             }
         }
-
+        System.out.print("totalGen ");
         return createMemoryInfoDataSet(rawData);
     }
 

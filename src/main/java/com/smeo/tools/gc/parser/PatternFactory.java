@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
  */
 public class PatternFactory {
     // 1.7+ this is a ',' below its is a '.'
-    private final static char decimalMarker = '.';
+    private final static GC_LOG_VERSION gcVersion = GC_LOG_VERSION.V1_7_plus;
 
-    private final static String doubleValue = "[0-9]+\\"+decimalMarker+"[0-9]+";
+    private final static String doubleValue = "[0-9]+\\"+ decimalMarker()+"[0-9]+";
+
+
     private final static Pattern applicationRunTimePattern = Pattern.compile("Application time: +"+doubleValue+" seconds");
     private static final String majorCollectionPatter = "[Full GC";
     private static final String majorSystemCollectionPatter = "[Full GC (System)";
@@ -51,7 +53,7 @@ public class PatternFactory {
     }
 
     public static double toDouble(String element) {
-        return Double.valueOf(element.replace(decimalMarker,'.'));
+        return Double.valueOf(element.replace(decimalMarker(), '.'));
     }
     public static CharSequence majorCollectionPatter() {
         return majorCollectionPatter;
@@ -93,5 +95,8 @@ public class PatternFactory {
         return doubleValuePatter;
     }
 
+    public static char decimalMarker() {
+        return gcVersion.decimalMarker();
+    }
 
 }
