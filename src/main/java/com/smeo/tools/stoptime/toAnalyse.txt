@@ -1,0 +1,58 @@
+9,714: GenCollectForAllocation          [    1206          1              1    ]      [     0     0     0     5    73    ]  0
+9,794: RevokeBias                       [    1205          0              3    ]      [     0     0     0     3     0    ]  0
+9,799: RevokeBias                       [    1206          1              2    ]      [     0     0     0     3     0    ]  0
+9,803: RevokeBias                       [    1206          2              4    ]      [     0     0     0     3     0    ]  0
+9,819: RevokeBias                       [    1217          1              9    ]      [     0     0     0     3     0    ]  0
+         vmop                    [threads: total initially_running wait_to_block]    [time: spin block sync cleanup vmop] page_trap_count
+9,824: RevokeBias                       [    1217          3              3    ]      [     0     0     0     3     0    ]  0
+9,828: RevokeBias                       [    1217          0              1    ]      [     0     0     0     3     0    ]  0
+9,832: RevokeBias                       [    1217          1              2    ]      [     0     0     0     3     0    ]  0
+9,836: RevokeBias                       [    1217          0              4    ]      [     0     0     0     3     0    ]  0
+9,840: RevokeBias                       [    1217          0              2    ]      [     0     0     0     2     0    ]  0
+9,843: RevokeBias                       [    1217          0              0    ]      [     0     0     0     2     0    ]  0
+10,243: ForceSafepoint                   [    1546          0              2    ]      [     0     0     0     6     0    ]  0
+10,983: ForceSafepoint                   [    2109          0              4    ]      [     0     0     0     6     0    ]  0
+11,491: GenCollectForAllocation          [    2569          0              0    ]      [     0     0     2     7   104    ]  0
+
+
+
+
+2015-11-18T22:17:10.371+0000: 8,437: Total time for which application threads were stopped: 0,0072008 seconds, Stopping threads took: 0,0001574 seconds
+2015-11-18T22:17:10.822+0000: 8,888: Application time: 0,4511030 seconds
+2015-11-18T22:17:10.826+0000: 8,892: Total time for which application threads were stopped: 0,0037271 seconds, Stopping threads took: 0,0004414 seconds
+2015-11-18T22:17:11.264+0000: 9,330: Application time: 0,4382481 seconds
+2015-11-18T22:17:11.268+0000: 9,334: Total time for which application threads were stopped: 0,0038196 seconds, Stopping threads took: 0,0004591 seconds
+2015-11-18T22:17:11.648+0000: 9,714: Application time: 0,3802022 seconds
+  {Heap before GC invocations=6 (full 2):
+    3743828K->234316K(4915200K), 0,0724044 secs] 3953485K->443973K(19251200K), 0,0733527 secs] [Times: user=0,94 sys=0,09, real=0,07 secs]
+2015-11-18T22:17:11.728+0000: 9,794: Total time for which application threads were stopped: 0,0797749 seconds, Stopping threads took: 0,0006198 seconds
+2015-11-18T22:17:11.728+0000: 9,794: Application time: 0,0001835 seconds
+2015-11-18T22:17:11.732+0000: 9,799: Total time for which application threads were stopped: 0,0043236 seconds, Stopping threads took: 0,0002986 seconds
+2015-11-18T22:17:11.732+0000: 9,799: Application time: 0,0000974 seconds
+2015-11-18T22:17:11.736+0000: 9,803: Total time for which application threads were stopped: 0,0039149 seconds, Stopping threads took: 0,0002821 seconds
+2015-11-18T22:17:11.736+0000: 9,803: Application time: 0,0000699 seconds
+2015-11-18T22:17:11.740+0000: 9,806: Total time for which application threads were stopped: 0,0037620 seconds, Stopping threads took: 0,0002584 seconds
+2015-11-18T22:17:11.753+0000: 9,819: Application time: 0,0128777 seconds
+2015-11-18T22:17:11.758+0000: 9,824: Total time for which application threads were stopped: 0,0045725 seconds, Stopping threads took: 0,0008884 seconds
+2015-11-18T22:17:11.758+0000: 9,824: Application time: 0,0000586 seconds
+2015-11-18T22:17:11.762+0000: 9,828: Total time for which application threads were stopped: 0,0041797 seconds, Stopping threads took: 0,0002530 seconds
+2015-11-18T22:17:11.762+0000: 9,828: Application time: 0,0000679 seconds
+2015-11-18T22:17:11.766+0000: 9,832: Total time for which application threads were stopped: 0,0038482 seconds, Stopping threads took: 0,0001972 seconds
+2015-11-18T22:17:11.766+0000: 9,832: Application time: 0,0000757 seconds
+2015-11-18T22:17:11.769+0000: 9,836: Total time for which application threads were stopped: 0,0036251 seconds, Stopping threads took: 0,0002610 seconds
+2015-11-18T22:17:11.769+0000: 9,836: Application time: 0,0000606 seconds
+2015-11-18T22:17:11.773+0000: 9,840: Total time for which application threads were stopped: 0,0037177 seconds, Stopping threads took: 0,0002473 seconds
+2015-11-18T22:17:11.773+0000: 9,840: Application time: 0,0000748 seconds
+2015-11-18T22:17:11.777+0000: 9,843: Total time for which application threads were stopped: 0,0033434 seconds, Stopping threads took: 0,0002217 seconds
+2015-11-18T22:17:11.777+0000: 9,843: Application time: 0,0000466 seconds
+2015-11-18T22:17:11.780+0000: 9,846: Total time for which application threads were stopped: 0,0033181 seconds, Stopping threads took: 0,0002004 seconds
+2015-11-18T22:17:12.177+0000: 10,243: Application time: 0,3969584 seconds
+2015-11-18T22:17:12.184+0000: 10,251: Total time for which application threads were stopped: 0,0073311 seconds, Stopping threads took: 0,0006942 seconds
+2015-11-18T22:17:12.916+0000: 10,983: Application time: 0,7319127 seconds
+2015-11-18T22:17:12.924+0000: 10,990: Total time for which application threads were stopped: 0,0075002 seconds, Stopping threads took: 0,0008392 seconds
+2015-11-18T22:17:13.426+0000: 11,492: Application time: 0,5022292 seconds
+{Heap before GC invocations=7 (full 2):
+ par new generation   total 4915200K, used 3920716K [0x00000002de000000, 0x0000000455000000, 0x0000000455000000)
+:
+
+
