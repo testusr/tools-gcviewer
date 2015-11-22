@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
  * Created by joachim on 25.12.13.
  */
 public class LogParseUtils {
-    private static final Pattern totalMemoryPatter = Pattern.compile("[0-9]+K");
-    private static final Pattern timeInSecsPattern = Pattern.compile(", [0-9]+\\.[0-9]+ secs");
-    private static final Pattern doubleNumber = Pattern.compile("[0-9]+\\.[0-9]+");
+    private static final Pattern totalMemoryPatter = PatternFactory.totalMemoryPattern();
+    private static final Pattern timeInSecsPattern = PatternFactory.timeInSecsPattern();
+    private static final Pattern doubleValuePattern = PatternFactory.doubleValuePatter();
 
     public static Integer[] extractKNumbers(String data) {
 
@@ -46,9 +46,9 @@ public class LogParseUtils {
         if (matcher.find()){
             String text = matcher.group();
             if (text.endsWith("secs")){
-                Matcher doubleMatcher = doubleNumber.matcher(text);
+                Matcher doubleMatcher = doubleValuePattern.matcher(text);
                 if (doubleMatcher.find()){
-                    return Double.valueOf(doubleMatcher.group());
+                    return PatternFactory.toDouble(doubleMatcher.group());
                 }
             }
         }

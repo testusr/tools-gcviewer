@@ -43,6 +43,17 @@ public class PatternFactory {
     private final static Pattern applicationStopPattern = Pattern.compile("Total time for which application threads were stopped: +"+doubleValue+" seconds");
     private final static Pattern doubleValuePatter = Pattern.compile(""+doubleValue+"");
 
+    // LogParseUtil
+    private static final Pattern totalMemoryPatter = Pattern.compile("[0-9]+K");
+    private static final Pattern timeInSecsPattern = Pattern.compile(", "+doubleValue+" secs");
+
+    public static Pattern timeInSecsPattern(){
+        return timeInSecsPattern;
+    }
+
+    public static Pattern totalMemoryPattern(){
+        return totalMemoryPatter;
+    }
 
     public static Pattern applicationRunTimePattern() {
         return applicationRunTimePattern;
