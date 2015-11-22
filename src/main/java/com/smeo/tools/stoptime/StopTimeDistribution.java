@@ -5,7 +5,9 @@ import com.smeo.tools.gc.parser.PatternFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,11 +158,13 @@ public class StopTimeDistribution {
 
     private void printConsistencyInformation() {
         int stopTimeEntries = this.stopTimeEntries.size();
-        System.out.println("## Printing consistency information for " + stopTimeEntries + "(rt)/"+ safePointDataEntryCount+"(sp) entries => " +(stopTimeEntries-safePointDataEntriesAssigned)+ " entries without safe point data");
+        System.out.println("## Printing consistency information for " + stopTimeEntries );
         int fullyConsistentEntries = 0;
         int inconsistentEntries = 0;
         int safePointInconsistencies = 0;
         int runTimeInconsistencies = 0;
+        int entriesWithSafePointData = 0;
+        int entriesWithPerfectlyMatchedSafePointData = 0;
         for (int i=0; i < this.stopTimeEntries.size(); i++){
             StopRunTimeEntry currEntry = this.stopTimeEntries.get(i);
             boolean runTimeStopTimeConsistent = currEntry.runTimeStopTimeConsistent();
@@ -172,11 +176,21 @@ public class StopTimeDistribution {
             } else {
                 fullyConsistentEntries++;
             }
+            if (currEntry.hasSavePointData()){
+                entriesWithSafePointData++;
+                if (currEntry.isExactSafePointMatch().get()){
+                    entriesWithPerfectlyMatchedSafePointData++;
+                }
+            }
         }
         System.out.println("fullyConsistentEntries: " + fullyConsistentEntries);
         System.out.println("inconsistentEntries: " + inconsistentEntries);
         System.out.println("safePointInconsistencies: " + safePointInconsistencies);
         System.out.println("runTimeInconsistencies: " + runTimeInconsistencies);
+        System.out.println("safePointDataEntries: " + safePointDataEntryCount);
+        System.out.println("entriesWithSafePointData: " + entriesWithSafePointData);
+        System.out.println("entriesWithPerfectlyMatchedSafePointData: " + entriesWithPerfectlyMatchedSafePointData);
+        System.out.println("entriesWithoutSafePointData: " + (stopTimeEntries - entriesWithSafePointData));
 
     }
 
@@ -204,12 +218,21 @@ public class StopTimeDistribution {
             return (expectedStopTimeEntryRelativeTime - stopTimeEntryRelativeTime) < 1.0;
         }
         public boolean safePointConsistent(){
-            if (safePointRelativeTime <= 0){
-                return true;
-            }
+            if (!hasSavePointData()) return true;
             return (Math.abs(runTimeEntryRelativeTime - safePointRelativeTime) < 10.0);
         }
 
+        private boolean hasSavePointData() {
+            if (safePointRelativeTime > 0){
+                return true;
+            }
+            return false;
+        }
+
+        public Optional<Boolean> isExactSafePointMatch(){
+            if (!hasSavePointData()) return Optional.empty();
+            return Optional.of(safePointRelativeTime == runTimeEntryRelativeTime);
+        }
         public boolean youngerThanRelativeTime(double relativeTime) {
             return this.stopTimeEntryRelativeTime >= relativeTime;
         }
