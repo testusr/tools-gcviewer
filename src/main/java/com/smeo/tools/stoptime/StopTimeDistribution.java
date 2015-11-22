@@ -5,7 +5,6 @@ import com.smeo.tools.gc.parser.PatternFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -25,7 +24,7 @@ public class StopTimeDistribution {
 
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-    private final static String safePointRegexp = "(" + decimalRegexp + "): ([A-Za-z]+) +\\[.*\\] +[0-9]+ +";
+    private final static String safePointRegexp = "(" + decimalRegexp + "): ([A-Za-z|_]+) +\\[.*\\] +[0-9]+ +";
 
     private Pattern stopTimePattern = Pattern.compile(stopTimeRegexp);
     private Pattern runTimePattern = Pattern.compile(runTimeRegexp);
@@ -125,16 +124,12 @@ public class StopTimeDistribution {
     }
 
     private StopRunTimeEntry findStopTimeEntryYoungerClosestTo(double relativeTime) {
-        StopRunTimeEntry lastYoungerEntry = null;
-        for (int i = this.stopTimeEntries.size() - 1; i > 0; i--) {
+        for (int i = 0; i < stopTimeEntries.size();  i++) {
             StopRunTimeEntry currStopTimeEntry = stopTimeEntries.get(i);
-            if (currStopTimeEntry.youngerThanRelativeTime(relativeTime)) {
-                lastYoungerEntry = currStopTimeEntry;
-            } else {
-                break;
-            }
+            if (currStopTimeEntry.matchesRelativeTime(relativeTime)
+                    || currStopTimeEntry.olderThan(relativeTime)) return currStopTimeEntry;
         }
-        return lastYoungerEntry;
+        return null;
     }
 
 
@@ -154,8 +149,14 @@ public class StopTimeDistribution {
         System.out.println("finished in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds - " + safePointDataEntriesAssigned + " reasons assigned");
 
         printConsistencyInformation();
+        printEntries();
     }
 
+    private void printEntries(){
+        for (int i=0; i < stopTimeEntries.size(); i++){
+            System.out.println(stopTimeEntries.get(i));
+        }
+    }
     private void printConsistencyInformation() {
         int stopTimeEntries = this.stopTimeEntries.size();
         System.out.println("## Printing consistency information for " + stopTimeEntries );
@@ -233,8 +234,9 @@ public class StopTimeDistribution {
             if (!hasSavePointData()) return Optional.empty();
             return Optional.of(safePointRelativeTime == runTimeEntryRelativeTime);
         }
-        public boolean youngerThanRelativeTime(double relativeTime) {
-            return this.stopTimeEntryRelativeTime >= relativeTime;
+
+        public boolean olderThan(double relativeTime) {
+            return this.runTimeEntryRelativeTime > relativeTime;
         }
 
         public void setSafePointData(double relativeTime, String reason) {
@@ -248,9 +250,28 @@ public class StopTimeDistribution {
             this.runTime = runTime;
         }
 
+        private Double matchTimeDiff(){
+            if (hasSavePointData())
+                return Math.abs(runTimeEntryRelativeTime  - safePointRelativeTime);
+            return null;
+        }
+
         @Override
         public String toString() {
-            return reason + ", " + stopTimeEntryDateTime + ", " + stopTimeEntryRelativeTime + ", " + stopTime;
+            return toString(runTimeEntryRelativeTime, safePointRelativeTime, reason, matchTimeDiff());
+        }
+
+        private String toString(Object... objects){
+            StringBuilder builder = new StringBuilder();
+            for  (int i=0; i < objects.length; i++){
+                builder.append(String.valueOf(objects[i]));
+                builder.append(", ");
+            }
+            return builder.toString();
+        }
+
+        public boolean matchesRelativeTime(double relativeTime) {
+            return this.runTimeEntryRelativeTime == relativeTime;
         }
     }
 
